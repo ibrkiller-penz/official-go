@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "official-go-7d2a2",
+    "site": "gov-writer",
     "public": ".",
     "ignore": [
       "firebase.json",
