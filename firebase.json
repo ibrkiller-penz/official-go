@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "official-go",
+    "site": "official-go-7d2a2",
     "public": ".",
     "ignore": [
       "firebase.json",
