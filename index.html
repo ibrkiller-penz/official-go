@@ -587,7 +587,7 @@ const AUTO=[
   {name:'쌍점 띄어쓰기',re:/([^\s\d:\/])\uE001[ \t]*:[ \t]*(?=[^\s\/])/g,fn:(m,a)=>a+E+': '},
   {name:'제N 붙여 쓰기',re:/(?<![가-힣])제\s+(\d)/g,fn:(m,d)=>'제'+d},
   {name:'금액 표기',re:/(\d[\d,]*)\s*천\s*원/g,fn:(m,n)=>(Number(n.replace(/,/g,''))*1000).toLocaleString('ko-KR')+'원'},
-  {name:''호' 삭제',re:/(\.\)|\uE001\))\s*호(?![가-힣])/g,fn:(m,a)=>a},
+  {name:"'호' 삭제",re:/(\.\)|\uE001\))\s*호(?![가-힣])/g,fn:(m,a)=>a},
 ];
 function autofix(src,on){
   if(!on)return{marked:src,text:src,log:[]};
@@ -712,10 +712,10 @@ function lint(doc){
     else if(!(pos.일시<pos.장소&&pos.장소<pos.대상))add('info','outline','일시→장소→대상 순서 권장');
   }
   if(/붙임/.test(state.intro+state.outline)&&!lines(state.attach).length)
-    add('warn','attach','본문에 '붙임'이 나오지만 첨부물이 없습니다.');
+    add('warn','attach',"본문에 '붙임'이 나오지만 첨부물이 없습니다.");
   // 하위 항목 하나만 있는 경우
   const single=(nodes)=>nodes.forEach(n=>{
-    if(n.children.length===1)add('info','outline',`'${strip(n.text).slice(0,14)}'의 하위 항목이 하나뿐입니다.','하나면 기호 생략 원칙');
+    if(n.children.length===1)add('info','outline',`'${strip(n.text).slice(0,14)}'의 하위 항목이 하나뿐입니다.`,'하나면 기호 생략 원칙');
     single(n.children);
   });
   single(doc.tops.slice(doc.tops.length&&strip(doc.tops[0].text).startsWith('관련')?1:0));
@@ -906,7 +906,6 @@ function readPumi(){
 }
 function renderPumi(){
   const p=readPumi();
-  const af=autofix;
   const fx=s=>autofix(s,true).text;
   const attach=lines(p.attach).map(a=>{
     a=a.replace(/^붙임\s*[:：]?\s*/,'').trim();
