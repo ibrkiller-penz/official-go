@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>바른 공문 작성기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Gothic+Coding&display=swap">
+<style>
+:root{
+  --ground:#F0F2EE; --surface:#FAFBF8; --field:#FFFFFF; --ink:#1D2A2E; --muted:#5B6A6C; --line:#CFD7D3;
+  --accent:#1E5A4B; --accent-ink:#FFFFFF; --accent-soft:#DCEBE5; --accent-hover:#174A3D;
+  --seal:#B4372B; --warn:#9A6400; --warn-soft:#FBEFD6; --err-soft:#F8E1DD;
+  --info:#2F5D8A; --info-soft:#E1EBF5;
+  --fix:#FFF2B3; --paper:#FFFFFF; --paper-ink:#141A1C; --paper-line:#2A3336;
+  --shadow:0 1px 2px rgba(20,40,35,.08),0 6px 20px rgba(20,40,35,.07);
+  --ui:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --doc:"Nanum Myeongjo","AppleMyungjo","Batang","바탕",serif;
+  --mono:"Nanum Gothic Coding","D2Coding",ui-monospace,monospace;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#121816;--surface:#1A2220;--field:#212A28;--ink:#E3EAE6;--muted:#9AA9A4;--line:#33403C;
+    --accent:#6FC2A6;--accent-ink:#0E1A16;--accent-soft:#1F3830;--accent-hover:#8AD4BA;
+    --seal:#E0786B;--warn:#E3B45A;--warn-soft:#3A2F17;--err-soft:#3D221E;
+    --info:#8DB6E0;--info-soft:#1D2B3A;
+    --fix:#FFE98A;--paper:#1E2624;--paper-ink:#E3EAE6;--paper-line:#AAB8B2;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#121816;--surface:#1A2220;--field:#212A28;--ink:#E3EAE6;--muted:#9AA9A4;--line:#33403C;
+  --accent:#6FC2A6;--accent-ink:#0E1A16;--accent-soft:#1F3830;--accent-hover:#8AD4BA;
+  --seal:#E0786B;--warn:#E3B45A;--warn-soft:#3A2F17;--err-soft:#3D221E;
+  --info:#8DB6E0;--info-soft:#1D2B3A;
+  --fix:#FFE98A;--paper:#1E2624;--paper-ink:#E3EAE6;--paper-line:#AAB8B2;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.55;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+
+/* ── layout ── */
+.wrap{max-width:1520px;margin:0 auto;padding-inline:16px}
+header{border-bottom:1px solid var(--line);background:var(--surface);padding-block:12px}
+.hdr{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.seal-mark{width:32px;height:32px;border:2px solid var(--seal);color:var(--seal);display:grid;place-items:center;
+  font-family:var(--doc);font-weight:800;font-size:14px;border-radius:3px;transform:rotate(-4deg);flex-shrink:0}
+.brand h1{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brand p{color:var(--muted);font-size:12px}
+.hdr-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* tabs */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--line);background:var(--surface);padding-inline:16px}
+.tab{padding:10px 18px;font-size:13.5px;font-weight:600;border:0;background:none;color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+@media(max-width:500px){.tab{padding:10px 12px;font-size:12.5px}}
+
+/* page areas */
+.page{display:none;padding-block:16px 48px}
+.page.active{display:block}
+.app{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:960px){.app{grid-template-columns:minmax(340px,440px) minmax(0,1fr)}}
+@media(min-width:1340px){.app{grid-template-columns:420px minmax(0,1fr) 310px}}
+@media(min-width:960px) and (max-width:1339px){.side{grid-column:1/-1}}
+
+/* buttons, inputs */
+.btn{border:1px solid var(--line);background:var(--surface);padding:7px 14px;border-radius:6px;cursor:pointer;
+  font:inherit;font-size:13px;font-weight:500;white-space:nowrap;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent-hover)}
+.btn.small{padding:4px 10px;font-size:12px}
+.btn.danger{color:var(--seal);border-color:var(--seal)}
+.btn.danger:hover{background:var(--err-soft)}
+select.btn{padding-right:28px;appearance:auto}
+input[type=text],select:not(.btn),textarea{width:100%;background:var(--field);border:1px solid var(--line);
+  border-radius:6px;padding:7px 10px;color:var(--ink);font:inherit;font-size:14px}
+textarea{resize:vertical;min-height:60px;line-height:1.6}
+textarea.code{font-family:var(--mono);font-size:13.5px;tab-size:2;white-space:pre;overflow-x:auto;min-height:160px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* form card */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 18px 18px;align-self:start}
+fieldset{border:0;border-bottom:1px solid var(--line);padding:14px 0 16px;display:grid;gap:10px}
+fieldset:last-child{border-bottom:0}
+legend{float:left;width:100%;padding:0;margin-bottom:2px;font-size:11.5px;font-weight:600;
+  letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+legend+*{clear:both}
+label{display:grid;gap:4px;font-size:12.5px;font-weight:500;color:var(--muted)}
+.row{display:grid;grid-template-columns:128px 1fr;gap:8px}
+.hint{font-size:12px;color:var(--muted);line-height:1.5}
+.hint b{color:var(--ink);font-weight:600}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;
+  padding:3px 10px 3px 7px;font-size:12.5px;cursor:pointer;background:var(--field);color:var(--ink)}
+.chip input{margin:0;accent-color:var(--accent)}
+.toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);font-weight:500}
+.toggle input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+
+/* preview */
+.stage{min-width:0;display:grid;gap:10px;align-content:start}
+.stage-bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.paper-wrap{overflow-x:auto}
+.paper{background:var(--paper);color:var(--paper-ink);max-width:760px;margin:0 auto;
+  padding:48px 54px 56px;box-shadow:var(--shadow);border-radius:2px;
+  font-family:var(--doc);font-size:15.5px;line-height:1.72;min-height:600px;position:relative}
+@media(max-width:600px){.paper{padding:24px 18px 32px;font-size:14.5px}}
+.p-org{text-align:center;font-size:22px;font-weight:800;letter-spacing:.12em;margin-bottom:24px}
+.p-head{display:grid;gap:2px;margin-bottom:8px}
+.p-hrow{display:grid;grid-template-columns:4.2em 1fr}
+.p-hrow .k{font-weight:700}
+.p-title{border-top:2px solid var(--paper-line);border-bottom:1px solid var(--paper-line);padding:6px 0;margin:8px 0 16px}
+.p-title .v{font-weight:700}
+.kw{color:var(--seal)}
+.ln{display:grid;grid-template-columns:auto minmax(0,1fr);padding-left:calc(var(--ind,0)*1em)}
+.ln.nomk{grid-template-columns:minmax(0,1fr)}
+.ln .mk{padding-right:.5em;white-space:nowrap}
+.ln .tx{overflow-wrap:anywhere}
+.end{margin-left:1em;white-space:nowrap}
+.p-att{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:1em;margin-top:14px}
+.p-att .items{display:grid}
+.p-att .ai{display:grid;grid-template-columns:auto minmax(0,1fr)}
+.p-att .ai .mk{padding-right:.5em}
+.p-act{margin-top:14px;font-size:14px}
+.p-act table{border-collapse:collapse;margin-top:6px;width:100%;table-layout:fixed}
+.p-act td{border:1px solid #888;text-align:center;padding:3px 2px;font-size:12.5px;line-height:1.35;word-break:keep-all}
+.p-act tr:first-child td{background:rgba(128,128,128,.12);font-weight:700}
+.p-foot{margin-top:52px;text-align:center;font-size:20px;font-weight:800;letter-spacing:.1em;position:relative}
+.p-foot .stamp{display:inline-grid;place-items:center;width:42px;height:42px;border:2px solid var(--seal);
+  color:var(--seal);font-size:11px;letter-spacing:0;line-height:1.1;margin-left:10px;
+  vertical-align:middle;transform:rotate(-6deg);opacity:.85;font-weight:700}
+.empty-ph{color:var(--muted);font-style:italic}
+mark.fx{background:var(--fix);color:inherit;border-radius:2px;padding:0 1px}
+.paper mark.fx{background:#FFF0A8}
+.nofx mark.fx{background:none;padding:0}
+
+/* 품의 preview */
+.p-pumi-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-family:var(--doc);font-size:14px}
+.p-pumi-table td,.p-pumi-table th{border:1px solid var(--paper-line);padding:6px 8px;text-align:left;vertical-align:top}
+.p-pumi-table th{background:rgba(128,128,128,.08);font-weight:700;width:100px;white-space:nowrap;text-align:center}
+
+/* side panel */
+.side{display:grid;gap:14px;align-content:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.panel h2{margin-bottom:10px;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tally{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pill{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;font-variant-numeric:tabular-nums}
+.pill.error{background:var(--err-soft);color:var(--seal)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.info{background:var(--info-soft);color:var(--info)}
+.pill.fixed{background:var(--accent-soft);color:var(--accent)}
+.lint{list-style:none;padding:0;display:grid;gap:8px}
+.lint li{display:grid;grid-template-columns:4px 1fr;gap:10px;font-size:13px}
+.lint li::before{content:"";border-radius:2px;background:var(--info)}
+.lint li.error::before{background:var(--seal)}
+.lint li.warn::before{background:var(--warn)}
+.lint li.fixed::before{background:var(--accent)}
+.lint .where{font-size:11.5px;color:var(--muted)}
+.lint .msg{font-weight:500}
+.lint .ex{font-family:var(--mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.lint .ex s{color:var(--seal);text-decoration-thickness:1px}
+.lint .ex ins{color:var(--accent);text-decoration:none;font-weight:600}
+.ok{color:var(--accent);font-size:13px}
+details.panel summary{cursor:pointer;font-weight:600;font-size:14px;list-style-position:inside}
+details.panel[open] summary{margin-bottom:10px}
+.ref{font-size:12.5px;display:grid;gap:12px}
+.ref h3{margin-bottom:4px;font-size:12px;letter-spacing:.06em;color:var(--accent);font-weight:600}
+.ref table{border-collapse:collapse;width:100%}
+.ref td,.ref th{border-bottom:1px solid var(--line);padding:4px;text-align:left;vertical-align:top;font-weight:400}
+.ref th{color:var(--muted);font-size:11.5px}
+.ref .m{font-family:var(--mono);font-size:12px}
+.chk{list-style:none;padding:0;display:grid;gap:6px;font-size:12.5px}
+.chk label{display:flex;gap:8px;align-items:flex-start;color:var(--ink);font-weight:400}
+.chk input{margin-top:3px;accent-color:var(--accent)}
+
+/* AI section */
+.ai-section{background:var(--info-soft);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.ai-section h3{font-size:13px;font-weight:600;margin-bottom:10px;color:var(--info)}
+.ai-section .row-ai{display:grid;gap:10px}
+.ai-section textarea{min-height:120px}
+.ai-section .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ai-result{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:12px;margin-top:10px;
+  font-size:13.5px;line-height:1.6;white-space:pre-wrap;display:none}
+.ai-result.show{display:block}
+.ai-loading{color:var(--muted);font-size:13px;display:none;align-items:center;gap:8px;margin-top:8px}
+.ai-loading.show{display:flex}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+
+/* settings page */
+.settings{max-width:640px;display:grid;gap:20px}
+.settings .card{padding:18px}
+.settings label{font-size:13px;font-weight:500;color:var(--muted);display:grid;gap:6px}
+.settings .desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  background:var(--ink);color:var(--ground);padding:9px 16px;border-radius:8px;font-size:13px;
+  display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);z-index:10;max-width:calc(100% - 32px)}
+.toast button{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font-weight:600;font:inherit}
+
+/* fallback copy dialog */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:16px;z-index:11}
+.overlay .box{background:var(--surface);border-radius:10px;padding:16px;width:min(640px,100%);display:grid;gap:10px}
+.overlay textarea{min-height:240px;font-family:var(--mono);font-size:13px}
+
+@media(prefers-reduced-motion:no-preference){.btn{transition:border-color .15s,background .15s}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hdr">
+    <div class="brand">
+      <div class="seal-mark" aria-hidden="true">公</div>
+      <div>
+        <h1>바른 공문 작성기</h1>
+        <p>「한 곳에 정리한 공문서 작성법」 규칙 기반 자동 교정</p>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <select id="tpl" class="btn" aria-label="서식 불러오기">
+        <option value="">서식 불러오기…</option>
+        <option value="meeting">회의·협의 안내 [출장]</option>
+        <option value="submit">자료 제출 요청 [제출]</option>
+        <option value="training">연수 안내 [연수]</option>
+        <option value="survey">설문 협조 [설문]</option>
+        <option value="pumi">품의서</option>
+        <option value="blank">빈 문서</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs wrap" role="tablist">
+  <button class="tab active" data-page="gongmun" role="tab">공문 작성</button>
+  <button class="tab" data-page="pumi" role="tab">품의서 작성</button>
+  <button class="tab" data-page="rewrite" role="tab">기존 공문 → 새 공문</button>
+  <button class="tab" data-page="settings" role="tab">설정</button>
+</nav>
+
+<!-- ═══════════ 공문 작성 ═══════════ -->
+<div class="page active wrap" id="page-gongmun">
+  <div class="app">
+    <form class="card" id="form" autocomplete="off">
+      <fieldset>
+        <legend>문서 머리</legend>
+        <label>기관명 (미리보기용)<input type="text" id="org"></label>
+        <label>수신<input type="text" id="recv" placeholder="수신자 참조 / ○○고등학교장"></label>
+        <label>(경유)<input type="text" id="via" placeholder="없으면 비워 두세요"></label>
+        <div class="row">
+          <label>공문핵심용어
+            <select id="keyword">
+              <option value="">표시 안 함</option>
+              <option>[제출]</option><option>[협조]</option><option>[설문]</option>
+              <option>[출장]</option><option>[연수]</option><option>[공모]</option>
+            </select>
+          </label>
+          <label>제목<input type="text" id="title"></label>
+        </div>
+        <p class="hint" id="kwHint"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>관련 근거</legend>
+        <label>한 줄에 하나씩<textarea id="refs" rows="2" placeholder="교육부-1234(2023.11.1)"></textarea></label>
+        <p class="hint">한 건이면 <b>1. 관련:</b> 한 줄, 두 건 이상이면 <b>가., 나.</b>로 나눕니다.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>본문</legend>
+        <label>첫 문단 (러프하게 써도 됩니다)<textarea id="intro" rows="3"></textarea></label>
+        <label>세부 항목 (Tab = 하위 항목)<textarea id="outline" class="code" rows="8" spellcheck="false"></textarea></label>
+        <p class="hint"><b>Tab</b>으로 한 단계 내리고 <b>Shift+Tab</b>으로 올립니다. 기호는 1. → 가. → 1) → 가) → (1) → (가) → ① → ㉮ 순서로 자동 부여됩니다.</p>
+        <label>추가 항목<textarea id="extra" class="code" rows="2" spellcheck="false" placeholder="문의: 교육과 ○○○ 장학사(031-000-0000)"></textarea></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>붙임</legend>
+        <label>첨부물 한 줄에 하나씩<textarea id="attach" rows="2"></textarea></label>
+        <p class="hint">수량이 없으면 '1부'를 붙이고, 하나뿐이면 번호를 생략합니다.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>공문학교실행표시제</legend>
+        <label class="toggle"><input type="checkbox" id="useAction"> 학교로 발송하는 공문</label>
+        <label>발송 범위<input type="text" id="scope" placeholder="관내 초·중·고등학교"></label>
+        <div class="checks" id="actions"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>발신명의 / 옵션</legend>
+        <label>발신명의<input type="text" id="sender"></label>
+        <label class="toggle"><input type="checkbox" id="autofix" checked> 표기법 자동 교정</label>
+      </fieldset>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:6px">
+        <button class="btn" id="copyBody" type="button">본문 복사</button>
+        <button class="btn" id="copyAll" type="button">전체 텍스트 복사</button>
+        <button class="btn primary" id="copyRich" type="button">서식 포함 복사 (K-에듀파인)</button>
+      </div>
+    </form>
+
+    <section class="stage" aria-label="미리보기">
+      <div class="stage-bar">
+        <span id="stat">미리보기</span>
+        <label class="toggle"><input type="checkbox" id="showFx" checked> 교정 표시</label>
+      </div>
+      <div class="paper-wrap"><article class="paper" id="paper"></article></div>
+    </section>
+
+    <aside class="side">
+      <section class="panel" aria-live="polite">
+        <h2>검토 결과 <button class="btn small" type="button" id="applyAll">제안 모두 반영</button></h2>
+        <div class="tally" id="tally"></div>
+        <ul class="lint" id="lint"></ul>
+      </section>
+
+      <details class="panel" id="refPanel">
+        <summary>표기 규칙 요약</summary>
+        <div class="ref">
+          <div>
+            <h3>항목 기호</h3>
+            <table>
+              <tr><th>순서</th><th>기호</th></tr>
+              <tr><td>첫째·둘째</td><td class="m">1. 2. / 가. 나.</td></tr>
+              <tr><td>셋째·넷째</td><td class="m">1) 2) / 가) 나)</td></tr>
+              <tr><td>다섯째·여섯째</td><td class="m">(1) (2) / (가) (나)</td></tr>
+              <tr><td>일곱째·여덟째</td><td class="m">① ② / ㉮ ㉯</td></tr>
+            </table>
+          </div>
+          <div>
+            <h3>숫자·부호 자동 교정</h3>
+            <table>
+              <tr><th>고치기 전</th><th>고친 뒤</th></tr>
+              <tr><td>2024.09.06.</td><td class="m">2024. 9. 6.</td></tr>
+              <tr><td>오후 3시 20분</td><td class="m">15:20</td></tr>
+              <tr><td>4. 23. ~ 6. 15.</td><td class="m">4. 23.∼6. 15.</td></tr>
+              <tr><td>원장 : 김갑동</td><td class="m">원장: 김갑동</td></tr>
+              <tr><td>345천원</td><td class="m">345,000원</td></tr>
+            </table>
+          </div>
+          <div>
+            <h3>끝 표시</h3>
+            <p class="hint">본문(또는 붙임) 마지막 글자에서 2타 띄우고 '끝.'</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel" id="chkPanel">
+        <summary>보내기 전 마지막 검토</summary>
+        <ul class="chk" id="chk"></ul>
+      </details>
+    </aside>
+  </div>
+</div>
+
+<!-- ═══════════ 품의서 ═══════════ -->
+<div class="page wrap" id="page-pumi">
+  <div class="app">
+    <form class="card" id="pumiForm" autocomplete="off">
+      <fieldset>
+        <legend>품의 기본</legend>
+        <label>기관명<input type="text" id="pm-org" placeholder="○○고등학교"></label>
+        <label>품의 제목<input type="text" id="pm-title" placeholder="2026학년도 진로체험 버스 임차 품의"></label>
+        <label>품의 일자<input type="text" id="pm-date" placeholder="2026. 9. 27."></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>품의 내용</legend>
+        <label>사업명<input type="text" id="pm-project" placeholder="2026학년도 진로체험 프로그램 운영"></label>
+        <label>목적<textarea id="pm-purpose" rows="2" placeholder="학생들의 진로 탐색 기회 확대를 위한 현장 체험학습 실시"></textarea></label>
+        <label>내용 (세부 항목)<textarea id="pm-content" class="code" rows="6" spellcheck="false" placeholder="일시: 2026. 10. 15.(수) 09:00∼16:00&#10;장소: ○○대학교&#10;대상: 2학년 전체(180명)&#10;소요 예산: 버스 임차료 600,000원(45인승 2대 × 300,000원)"></textarea></label>
+        <label>소요 예산 총액<input type="text" id="pm-budget" placeholder="금600,000원(육십만 원)"></label>
+        <label>예산 과목<input type="text" id="pm-account" placeholder="세출 2-1-303-01 학생복지활동비"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>결재 / 발신</legend>
+        <label>품의자 (직위·성명)<input type="text" id="pm-drafter" placeholder="교사 ○○○"></label>
+        <label>결재선<input type="text" id="pm-approval" placeholder="담당 → 부장 → 교감 → 교장"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>붙임</legend>
+        <label>첨부물<textarea id="pm-attach" rows="2" placeholder="견적서 1부"></textarea></label>
+      </fieldset>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:6px">
+        <button class="btn" id="pumiCopyText" type="button">텍스트 복사</button>
+        <button class="btn primary" id="pumiCopyRich" type="button">서식 포함 복사</button>
+      </div>
+    </form>
+
+    <section class="stage" aria-label="품의서 미리보기">
+      <div class="stage-bar"><span>품의서 미리보기</span></div>
+      <div class="paper-wrap"><article class="paper" id="pumiPaper"></article></div>
+    </section>
+  </div>
+</div>
+
+<!-- ═══════════ 기존 공문 → 새 공문 ═══════════ -->
+<div class="page wrap" id="page-rewrite">
+  <div style="max-width:900px">
+    <div class="card" style="padding:18px">
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:4px">기존 공문 바탕으로 새 공문 만들기</h2>
+      <p class="hint" style="margin-bottom:14px">작년 공문이나 교육청에서 받은 공문을 붙여 넣으면, 날짜·연도·요일 등을 올해에 맞게 자동 변환하고 표기법을 교정합니다.</p>
+
+      <label style="font-size:13px;font-weight:500;color:var(--muted);display:grid;gap:6px;margin-bottom:12px">
+        기존 공문 내용 붙여넣기
+        <textarea id="rw-source" rows="12" style="font-family:var(--mono);font-size:13px" placeholder="기존 공문 전체 또는 본문만 붙여 넣으세요."></textarea>
+      </label>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <label style="font-size:13px;font-weight:500;color:var(--muted);display:grid;gap:4px">
+          기존 연도
+          <input type="text" id="rw-from" placeholder="2025" style="width:120px">
+        </label>
+        <label style="font-size:13px;font-weight:500;color:var(--muted);display:grid;gap:4px">
+          새 연도
+          <input type="text" id="rw-to" placeholder="2026" style="width:120px">
+        </label>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+        <button class="btn primary" type="button" id="rw-convert">변환하기</button>
+        <button class="btn" type="button" id="rw-toEditor">공문 편집기로 보내기</button>
+        <button class="btn" type="button" id="rw-copy">변환 결과 복사</button>
+      </div>
+
+      <label style="font-size:13px;font-weight:500;color:var(--muted);display:grid;gap:6px">
+        변환 결과
+        <textarea id="rw-result" rows="12" style="font-family:var(--mono);font-size:13px" readonly placeholder="변환 결과가 여기에 표시됩니다."></textarea>
+      </label>
+      <div id="rw-log" style="margin-top:10px;font-size:12.5px;color:var(--muted)"></div>
+    </div>
+
+    <!-- AI assist (optional) -->
+    <div class="ai-section" style="margin-top:16px" id="aiSection">
+      <h3>✦ AI 다듬기 (선택 사항)</h3>
+      <p class="hint" style="margin-bottom:10px">Gemini API 키가 있으면 러프한 내용을 공문체로 다듬을 수 있습니다. 설정 탭에서 API 키를 입력하세요.</p>
+      <label style="font-size:13px;font-weight:500;color:var(--muted);display:grid;gap:6px">
+        러프한 내용
+        <textarea id="ai-input" rows="5" placeholder="내일 오후 2시에 소회의실에서 진학담당자 회의 할 건데 참석해달라는 공문 써야 해"></textarea>
+      </label>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn primary" type="button" id="ai-polish">공문체로 다듬기</button>
+        <button class="btn" type="button" id="ai-to-editor">결과 → 공문 편집기</button>
+      </div>
+      <div class="ai-loading" id="aiLoading"><div class="spinner"></div><span>Gemini에 요청 중…</span></div>
+      <div class="ai-result" id="aiResult"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 설정 ═══════════ -->
+<div class="page wrap" id="page-settings">
+  <div class="settings">
+    <div class="card">
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:14px">기본 설정</h2>
+      <label>기본 기관명
+        <input type="text" id="set-org" placeholder="○○고등학교">
+      </label>
+      <p class="desc">새 문서를 만들 때 자동으로 채워집니다.</p>
+      <label style="margin-top:12px">기본 발신명의
+        <input type="text" id="set-sender" placeholder="○○고등학교장">
+      </label>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:14px">AI 다듬기 (선택 사항)</h2>
+      <label>Gemini API 키
+        <input type="password" id="set-apikey" placeholder="AI...">
+      </label>
+      <p class="desc" style="margin-top:6px">Google AI Studio에서 발급한 Gemini API 키를 입력하면 "기존 공문 → 새 공문" 탭에서 러프한 내용을 공문체로 다듬을 수 있습니다. 키는 이 브라우저에만 저장되고 외부로 전송하지 않습니다(Gemini API 호출 제외).</p>
+      <button class="btn small" type="button" id="set-save" style="margin-top:10px">저장</button>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:14px">데이터</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn small" type="button" id="set-export">임시 저장 내보내기 (JSON)</button>
+        <button class="btn small danger" type="button" id="set-clear">임시 저장 모두 지우기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+
+/* ============ 탭 ============ */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    $('page-'+t.dataset.page).classList.add('active');
+  });
+});
+
+/* ============ 상수 ============ */
+const ACTIONS=['제출','출장','자료집계','자체계획수립','위원회심의','교육과정반영','자체연수','의견조사'];
+const KW_HINT={'':'','[제출]':'기한 내 회신 필요','[협조]':'선택적 협조 요청','[설문]':'설문·의견수렴',
+  '[출장]':'공식 출장 요청','[연수]':'연수 안내','[공모]':'모집 안내'};
+const CHECKS=['내용·설명·기록·계수에 틀린 곳이 없다','필요한 항목(일시, 장소, 대상, 주제 등)이 빠지지 않았다',
+  '문장 부호를 맞춤법에 맞게 썼다','이상·이하·미만·초과 등 용어를 정확히 썼다',
+  '육하원칙에 비용·기간까지 구체적으로 썼다','구체적이고 개별적인 표현을 썼다',
+  '적극적인 표현을 썼다','애매한 표현을 피했다','문장을 짧게 개조식으로 썼다',
+  '쉬운 말을 썼다 (금일→오늘, 향후→앞으로)','한자·전문용어를 풀어 썼다',
+  '1건 1매, 받은 문서를 되풀이하지 않았다','"~할 것" 대신 "~하시기 바랍니다"처럼 알맞은 경어'];
+const TEXT_FIELDS=['org','recv','via','keyword','title','refs','intro','outline','extra','attach','scope','sender'];
+const FIELD_NAME={recv:'수신',via:'경유',title:'제목',refs:'관련',intro:'첫 문단',outline:'세부 항목',extra:'추가',attach:'붙임',scope:'범위'};
+
+/* ============ 서식 ============ */
+const TEMPLATES={
+  meeting:{org:'경기도교육청',recv:'수신자 참조',via:'',keyword:'[출장]',
+    title:'K-에듀파인시스템 00분과 담당자 협의회 개최 안내',
+    refs:'정책기획관-1234(2023.11.1)',
+    intro:'K-에듀파인시스템을 활용한 학교업무 개선 및 효율화 방안 마련을 위하여 아래와 같이 담당자 협의를 안내하오니 대상자가 참석할 수 있도록 협조하여 주시기 바랍니다.',
+    outline:'일시: 2023.12.1 15:00~17:00\n장소: 경기도교육청 소회의실8(남부청사 4층)\n대상: 00분과 위원 및 업무 담당자 20명\n내용: 학교업무 개선 및 효율화 향후 정책 방향 모색\n협조사항\n  14:50까지 참석자 등록 완료\n  청사 내 주차 공간 협소하므로 대중교통 이용 권장',
+    extra:'',attach:'위원 명단',useAction:true,scope:'관내 초·중·고등학교',actions:['출장'],sender:'경기도교육감'},
+  submit:{org:'○○교육지원청',recv:'관내 고등학교장',via:'',keyword:'[제출]',
+    title:'2027학년도 대입 수시모집 지원 현황 자료 제출',refs:'',
+    intro:'2027학년도 대입 수시모집 지원 현황을 파악하고자 하오니 기한 내에 제출하여 주시기 바랍니다.',
+    outline:'제출 기한: 2026년 10월 16일 17시까지\n제출 방법: 업무관리시스템 문서 회신(붙임 서식 사용)\n제출 내용: 3학년 수시모집 지원 인원 및 대학별 건수\n유의사항\n  해당 없는 학교도 \'해당 없음\'으로 제출\n  개인정보(성명, 생년월일)는 기재하지 않음',
+    extra:'문의: 중등교육과 ○○○ 장학사(000-000-0000)',
+    attach:'수시모집 지원 현황 제출 서식 1부\n작성 예시 1부',
+    useAction:true,scope:'관내 고등학교',actions:['제출','자료집계'],sender:'○○교육지원청교육장'},
+  training:{org:'○○교육연수원',recv:'수신자 참조',via:'',keyword:'[연수]',
+    title:'2026 하반기 대입 진학지도 역량 강화 연수 신청 안내',
+    refs:'교육부 대입정책과-2345(2026.8.20)\n○○교육청 중등교육과-6789(2026.9.1)',
+    intro:'고등학교 교사의 대입 진학지도 역량을 높이고자 아래와 같이 연수를 운영하오니 희망 교원이 신청할 수 있도록 안내하여 주시기 바랍니다.',
+    outline:'연수 기간: 2026.10.20 ~ 2026.10.22 (3일, 15시간)\n장소: ○○교육연수원 대강당\n대상: 고등학교 3학년 담임 및 진로진학상담 교사 120명\n내용\n  2027학년도 대입 전형 변화와 대응 전략\n  학생부종합전형 서류 평가 실습\n  정시 모집 지원 전략 사례 나누기\n신청 방법: 연수원 누리집 선착순 신청 (10. 10. 18:00까지)',
+    extra:'',attach:'연수 세부 일정표',useAction:true,scope:'관내 고등학교',actions:['자체연수'],sender:'○○교육연수원장'},
+  survey:{org:'○○고등학교',recv:'수신자 참조',via:'',keyword:'[설문]',
+    title:'2026학년도 진로진학 프로그램 만족도 조사 협조',refs:'',
+    intro:'2026학년도 진로진학 프로그램 운영 결과를 점검하고 다음 학년도 계획에 반영하고자 설문조사를 실시하오니 학생과 학부모가 참여할 수 있도록 안내하여 주시기 바랍니다.',
+    outline:'조사 기간: 2026. 11. 2.(월)∼11. 13.(금)\n조사 대상: 1·2학년 학생 및 학부모\n참여 방법: 온라인 설문(붙임 안내문의 QR코드 이용)',
+    extra:'',attach:'설문 참여 안내문',useAction:false,scope:'',actions:[],sender:'○○고등학교장'},
+  pumi:{org:'○○고등학교',recv:'',via:'',keyword:'',title:'',refs:'',intro:'',outline:'',extra:'',attach:'',useAction:false,scope:'',actions:[],sender:''},
+  blank:{org:'',recv:'',via:'',keyword:'',title:'',refs:'',intro:'',outline:'',extra:'',attach:'',useAction:false,scope:'',actions:[],sender:''}
+};
+
+/* ============ 항목 기호 ============ */
+const CHO=[0,2,3,5,6,7,9,11,12,14,15,16,17,18], JUNG=[0,4,8,13,18,20];
+const ko=i=>String.fromCharCode(0xAC00+(CHO[i%14]*21+JUNG[Math.floor(i/14)%6])*28);
+function marker(level,i){
+  switch(Math.min(level,7)){
+    case 0:return(i+1)+'.';case 1:return ko(i)+'.';case 2:return(i+1)+')';case 3:return ko(i)+')';
+    case 4:return'('+(i+1)+')';case 5:return'('+ko(i)+')';
+    case 6:return i<20?String.fromCharCode(0x2460+i):'('+(i+1)+')';
+    default:return i<14?String.fromCharCode(0x326E+i):'('+ko(i)+')';
+  }
+}
+const MK_RE=/^(?:\d{1,2}[.)](?=\s+\D)|\(\d{1,2}\)|[가-힣][.)](?=\s)|\([가-힣]\)|[\u2460-\u2473\u326E-\u327B]|[-•·○□◦▪*])\s*/;
+const stripMk=s=>s.replace(MK_RE,'');
+
+/* ============ 자동 교정 ============ */
+const S='\uE000',E='\uE001';
+const strip=s=>s.replace(/[\uE000\uE001]/g,'');
+const pad=n=>String(n).padStart(2,'0');
+const WD='일월화수목금토';
+function validDate(y,m,d){const t=new Date(y,m-1,d);return t.getFullYear()==y&&t.getMonth()==m-1&&t.getDate()==d;}
+const WSUF='(?:\\s*(?:\\(\\s*([월화수목금토일])\\s*\\)|([월화수목금토일])요일))?';
+const AUTO=[
+  {name:'날짜 표기',re:new RegExp('(?<!\\d)(\\d{4})\\s*(?:년\\s*|[.\\-/]\\s*)(\\d{1,2})\\s*(?:월\\s*|[.\\-/]\\s*)(\\d{1,2})(?!\\d)(?:\\s*일|\\.)?'+WSUF,'g'),
+   fn:(m,y,mo,d,w1,w2)=>{if(!validDate(+y,+mo,+d))return m;const w=w1||w2;return`${y}. ${+mo}. ${+d}.`+(w?`(${w})`:'');}},
+  {name:'날짜 표기',re:new RegExp('(?<![\\d.])(\\d{1,2})월\\s*(\\d{1,2})일'+WSUF,'g'),
+   fn:(m,mo,d,w1,w2)=>{if(+mo<1||+mo>12||+d<1||+d>31)return m;const w=w1||w2;return`${+mo}. ${+d}.`+(w?`(${w})`:'');}},
+  {name:'시간 24시각제',re:/(오전|오후)\s*(\d{1,2})\s*시(?!간)\s*(?:(\d{1,2})\s*분|(반))?/g,
+   fn:(m,ap,h,mi,half)=>{h=+h;if(h>12)return m;if(ap==='오후'&&h<12)h+=12;if(ap==='오전'&&h===12)h=0;return pad(h)+':'+(half?'30':pad(mi||0));}},
+  {name:'시간 24시각제',re:/(?<![\d:])(\d{1,2})\s*시\s*(\d{1,2})\s*분/g,fn:(m,h,mi)=>+h>24?m:pad(h)+':'+pad(mi)},
+  {name:'시간 24시각제',re:/(?<![\d:])(1[3-9]|2[0-4])\s*시(?![간작대])/g,fn:(m,h)=>pad(h)+':00'},
+  {name:'시간 24시각제',re:/(?<![\d:.])(\d{1,2})\s*:\s*(\d{2})(?!\d)/g,fn:(m,h,mi)=>+h>24||+mi>59?m:pad(h)+':'+mi},
+  {name:'물결표 붙여 쓰기',re:/[ \t]*[~～〜∼][ \t]*/g,fn:()=>'∼'},
+  {name:'쌍점 띄어쓰기',re:/([^\s\d:\/\uE000\uE001])[ \t]*:[ \t]*(?=[^\s\/])/g,fn:(m,a)=>a+': '},
+  {name:'쌍점 띄어쓰기',re:/([^\s\d:\/])\uE001[ \t]*:[ \t]*(?=[^\s\/])/g,fn:(m,a)=>a+E+': '},
+  {name:'제N 붙여 쓰기',re:/(?<![가-힣])제\s+(\d)/g,fn:(m,d)=>'제'+d},
+  {name:'금액 표기',re:/(\d[\d,]*)\s*천\s*원/g,fn:(m,n)=>(Number(n.replace(/,/g,''))*1000).toLocaleString('ko-KR')+'원'},
+  {name:''호' 삭제',re:/(\.\)|\uE001\))\s*호(?![가-힣])/g,fn:(m,a)=>a},
+];
+function autofix(src,on){
+  if(!on)return{marked:src,text:src,log:[]};
+  let t=src;const log=[];
+  for(const r of AUTO){
+    t=t.replace(r.re,(...a)=>{
+      const m=a[0],out=r.fn(...a);
+      if(strip(out)===strip(m))return m;
+      log.push({rule:r.name,from:strip(m).trim(),to:strip(out).trim()});
+      return r.name==='물결표 붙여 쓰기'||r.name==='쌍점 띄어쓰기'?out:S+out+E;
+    });
+  }
+  return{marked:t,text:strip(t),log};
+}
+
+/* ============ 다듬기 제안 ============ */
+const SUGG=[
+  ['띄어쓰기',/그 동안/g,'그동안'],['띄어쓰기',/첫 해/g,'첫해'],
+  ['조사는 앞말에 붙여 씀',/(\S) (부터|까지)(?=[\s,.)]|$)/gm,'$1$2'],
+  ['띄어쓰기',/수 차례/g,'수차례'],['띄어쓰기',/더욱 더/g,'더욱더'],
+  ['띄어쓰기',/(하는|인) 바(?=[\s,]|$)/gm,'$1바'],
+  ['띄어쓰기',/(두|세|네)가지/g,'$1 가지'],['띄어쓰기',/각(\d)/g,'각 $1'],
+  ['띄어쓰기',/안됩니다/g,'안 됩니다'],['띄어쓰기',/매(학교|학기|학년|회|월)(?![가-힣])/g,'매 $1'],
+  ['띄어쓰기',/(\d+(?:%|명|개|일|개월|년|시간|회|건))(이상|이하|미만|초과|이내)/g,'$1 $2'],
+  ['띄어쓰기',/변동없음/g,'변동 없음'],
+  ['띄어쓰기',/(사용|진행|검토|운영|추진|공사|회의|수업)중(?=[인이에]|\s|$)/gm,'$1 중'],
+  ['띄어쓰기',/(참여|참석|제출|신청|방문|이용|출장|위반|발생|미제출)시(?=[\s,.)]|$)/gm,'$1 시'],
+  ['띄어쓰기',/방과후(?!학교)/g,'방과 후'],['띄어쓰기',/학교간/g,'학교 간'],
+  ['띄어쓰기',/기한내/g,'기한 내'],['띄어쓰기',/용도외/g,'용도 외'],
+  ['띄어쓰기',/(\d+여)(명|개|곳|건|개교|권)/g,'$1 $2'],
+  ['한 단어는 붙여 씀',/귀 (교|댁|기관)/g,'귀$1'],
+  ['쉬운 말로',/금일/g,'오늘'],['쉬운 말로',/명일/g,'내일'],['쉬운 말로',/익일/g,'다음 날'],['쉬운 말로',/금번/g,'이번'],
+  ['쉬운 말로',/향후/g,'앞으로'],['쉬운 말로',/에 의거하여/g,'에 따라'],['쉬운 말로',/에 의거함/g,'에 따름'],
+  ['쉬운 말로',/만전을 기(해|하)/g,'최선을 다$1'],['쉬운 말로',/에 있어서/g,'에서'],
+  ['쉬운 말로',/(을|를) 실시(하|한|합)/g,'$1 $2'],
+  ['알맞은 경어',/할 것\.?$/gm,'하시기 바랍니다.'],['알맞은 경어',/하기 바람\.?$/gm,'하시기 바랍니다.'],
+  ['알맞은 경어',/주시기를? 바람\.?$/gm,'주시기 바랍니다.'],
+  ['외국어 풀어 씀',/(?<![(\w가-힣])MOU(?![\w)])/g,'업무협정(MOU)'],
+];
+
+/* ============ 공문 state ============ */
+let state={},fixed={},lints=[];
+function readForm(){
+  const s={};
+  for(const k of TEXT_FIELDS)s[k]=$(k).value;
+  s.useAction=$('useAction').checked;s.autofix=$('autofix').checked;
+  s.actions=[...document.querySelectorAll('#actions input:checked')].map(i=>i.value);
+  return s;
+}
+function writeForm(s){
+  for(const k of TEXT_FIELDS)$(k).value=s[k]??'';
+  $('useAction').checked=!!s.useAction;$('autofix').checked=s.autofix!==false;
+  document.querySelectorAll('#actions input').forEach(i=>i.checked=(s.actions||[]).includes(i.value));
+}
+
+/* ============ 구조 ============ */
+function parseOutline(text){
+  const root={children:[]};const stack=[{lead:-1,node:root}];
+  for(let raw of text.split('\n')){
+    raw=raw.replace(/\t/g,'  ');if(!raw.trim())continue;
+    const lead=raw.match(/^ */)[0].length;
+    const node={text:stripMk(raw.trim()),children:[]};
+    while(stack.length>1&&stack[stack.length-1].lead>=lead)stack.pop();
+    stack[stack.length-1].node.children.push(node);
+    stack.push({lead,node});
+  }
+  return root.children;
+}
+const lines=t=>t.split('\n').map(x=>x.trim()).filter(Boolean);
+
+function build(){
+  const on=state.autofix;fixed={};const fixLog=[];
+  for(const k of['recv','via','title','refs','intro','outline','extra','attach','scope']){
+    const r=autofix(state[k]||'',on);fixed[k]=r;r.log.forEach(l=>fixLog.push({...l,field:k}));
+  }
+  const refs=lines(fixed.refs.marked).map(x=>stripMk(x).replace(/^관련\s*[:：]?\s*/,''));
+  const tops=[];
+  if(refs.length===1)tops.push({text:'관련: '+refs[0],children:[]});
+  else if(refs.length>1)tops.push({text:'관련',children:refs.map(t=>({text:t,children:[]}))});
+  const introT=fixed.intro.marked.trim().replace(/\s*\n\s*/g,' ');
+  const tree=parseOutline(fixed.outline.marked);
+  if(introT||tree.length)tops.push({text:introT,children:tree});
+  parseOutline(fixed.extra.marked).forEach(n=>tops.push(n));
+  const numbered=tops.length>1;
+  const body=[];
+  const walk=(nodes,level,withMk)=>nodes.forEach((n,i)=>{
+    body.push({indent:withMk?level:0,marker:withMk?marker(level,i):'',text:n.text});
+    walk(n.children,withMk?level+1:0,true);
+  });
+  walk(tops,0,numbered);
+  const attach=lines(fixed.attach.marked).map(a=>{
+    a=stripMk(a.replace(/^붙임\s*[:：]?\s*/,'')).replace(/\s*끝\.?$/,'').trim();
+    if(!/(\d+\s*(부|매|개|권|장|종|건|식|점)씩?|각\s*\d+\s*부)\.?$/.test(strip(a)))a+=' 1부';
+    if(!/\.$/.test(strip(a)))a+='.';
+    return a;
+  });
+  body.forEach(l=>{l.text=l.text.replace(/\s*끝\.?\s*$/,'');});
+  return{body,attach,numbered,fixLog,tops};
+}
+
+/* ============ 검토 ============ */
+function weekdayOf(y,m,d){return validDate(y,m,d)?WD[new Date(y,m-1,d).getDay()]:null;}
+function lint(doc){
+  const L=[];
+  const add=(level,field,msg,ex,apply)=>L.push({level,field,msg,ex,apply});
+  if(!state.title.trim())add('error','title','제목을 입력하세요.');
+  if(!state.recv.trim())add('warn','recv','수신자를 입력하세요.','예: 수신자 참조');
+  if(!state.intro.trim())add('error','intro','본문 첫 문단이 비어 있습니다.');
+  else if(!/[.다]$/.test(state.intro.trim()))add('warn','intro','첫 문단이 온점(.)으로 끝나지 않습니다.');
+  if(state.intro.trim().length>150)add('info','intro','첫 문단이 깁니다. 짧게 끊어 쓰세요.');
+  if(!state.keyword&&state.useAction)add('info','title','학교로 보내는 공문이면 공문핵심용어를 붙이세요.');
+  if(state.useAction&&!state.actions.length)add('warn','scope','학교실행표시제: 학교가 할 일을 선택하세요.');
+  if(state.useAction&&!state.scope.trim())add('warn','scope','발송 범위를 입력하세요.');
+  // 행사 항목 순서 검사
+  const all=(state.title+' '+state.intro);
+  if(/회의|협의|연수|설명회|행사|개최|워크숍|대회/.test(all)){
+    const keys=doc.tops.flatMap(t=>t.children).map(n=>strip(n.text));
+    const find=re=>keys.findIndex(k=>re.test(k));
+    const pos={일시:find(/^(일시|기간|일정|연수 기간)/),장소:find(/^장소/),대상:find(/^(대상|참석|참가)/)};
+    const miss=Object.entries(pos).filter(([,v])=>v<0).map(([k])=>k);
+    if(miss.length)add('warn','outline','행사·회의 안내에 빠진 항목: '+miss.join(', '),'일시→장소→대상→내용 순');
+    else if(!(pos.일시<pos.장소&&pos.장소<pos.대상))add('info','outline','일시→장소→대상 순서 권장');
+  }
+  if(/붙임/.test(state.intro+state.outline)&&!lines(state.attach).length)
+    add('warn','attach','본문에 '붙임'이 나오지만 첨부물이 없습니다.');
+  // 하위 항목 하나만 있는 경우
+  const single=(nodes)=>nodes.forEach(n=>{
+    if(n.children.length===1)add('info','outline',`'${strip(n.text).slice(0,14)}'의 하위 항목이 하나뿐입니다.','하나면 기호 생략 원칙');
+    single(n.children);
+  });
+  single(doc.tops.slice(doc.tops.length&&strip(doc.tops[0].text).startsWith('관련')?1:0));
+  // 요일·제안
+  for(const f of['title','refs','intro','outline','extra','attach']){
+    const txt=fixed[f].text;
+    const dateRe=/(\d{4})\. (\d{1,2})\. (\d{1,2})\.(\(([월화수목금토일])\))?/g;
+    let wrong=[];
+    for(const m of txt.matchAll(dateRe)){
+      const w=weekdayOf(+m[1],+m[2],+m[3]);if(!w)continue;
+      if(m[5]&&m[5]!==w)wrong.push([m[0],`${m[1]}. ${m[2]}. ${m[3]}.(${w})`]);
+    }
+    const fixDates=t=>t.replace(dateRe,(m,y,mo,d,_,w0)=>{const w=weekdayOf(+y,+mo,+d);if(!w)return m;if(w0&&w0!==w)return`${y}. ${mo}. ${d}.(${w})`;return m;});
+    if(wrong.length)add('error',f,'요일이 날짜와 맞지 않습니다.',wrong,()=>setField(f,fixDates(fixed[f].text)));
+    for(const[cat,re,to]of SUGG){
+      const ms=[...txt.matchAll(re)];if(!ms.length)continue;
+      const one=new RegExp(re.source,re.flags.replace('g',''));
+      add('sugg',f,cat,ms.slice(0,3).map(m=>[m[0].trim(),m[0].replace(one,to).trim()]),()=>setField(f,fixed[f].text.replace(re,to)));
+    }
+  }
+  doc.fixLog.forEach(l=>L.push({level:'fixed',field:l.field,msg:l.rule,ex:[[l.from,l.to]]}));
+  return L;
+}
+function setField(f,v){$(f).value=v;update();}
+
+/* ============ 출력 ============ */
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fxHtml=s=>esc(s).replace(/\uE000/g,'<mark class="fx">').replace(/\uE001/g,'</mark>');
+function titleFull(){const t=fixed.title.marked.trim();return(state.keyword?state.keyword+' ':'')+t;}
+function renderPaper(doc){
+  const endAt=doc.attach.length?'attach':'body';
+  let h='';
+  h+=`<p class="p-org">${esc(state.org.trim())||'<span class="empty-ph">기관명</span>'}</p>`;
+  h+=`<div class="p-head"><div class="p-hrow"><span class="k">수신</span><span>${fxHtml(fixed.recv.marked.trim())||'<span class="empty-ph">수신자</span>'}</span></div>`;
+  if(fixed.via.text.trim())h+=`<div class="p-hrow"><span class="k">(경유)</span><span>${fxHtml(fixed.via.marked.trim())}</span></div>`;
+  h+=`</div>`;
+  const tt=fixed.title.marked.trim();
+  h+=`<div class="p-hrow p-title"><span class="k">제목</span><span class="v">${state.keyword?`<span class="kw">${esc(state.keyword)}</span> `:''}${fxHtml(tt)||'<span class="empty-ph">제목</span>'}</span></div>`;
+  doc.body.forEach((l,i)=>{
+    const isEnd=endAt==='body'&&i===doc.body.length-1;
+    h+=`<div class="ln${l.marker?'':' nomk'}" style="--ind:${l.indent}">${l.marker?`<span class="mk">${esc(l.marker)}</span>`:''}<span class="tx">${fxHtml(l.text)}${isEnd?'<span class="end">끝.</span>':''}</span></div>`;
+  });
+  if(doc.attach.length){
+    const multi=doc.attach.length>1;
+    h+=`<div class="p-att"><span>붙임</span><div class="items">`+doc.attach.map((a,i)=>`<div class="ai">${multi?`<span class="mk">${i+1}.</span>`:'<span></span>'}<span>${fxHtml(a)}${i===doc.attach.length-1?'<span class="end">끝.</span>':''}</span></div>`).join('')+`</div></div>`;
+  }
+  if(state.useAction){
+    h+=`<div class="p-act"><div>${esc(scopeLine())}</div><table><tr>${ACTIONS.map(a=>`<td>${a}</td>`).join('')}</tr><tr>${ACTIONS.map(a=>`<td>${state.actions.includes(a)?'○':'&nbsp;'}</td>`).join('')}</tr></table></div>`;
+  }
+  h+=`<div class="p-foot">${esc(state.sender.trim())||'<span class="empty-ph">발신명의</span>'}<span class="stamp" aria-hidden="true">직인<br>생략</span></div>`;
+  $('paper').innerHTML=h;
+}
+function scopeLine(){const s=fixed.scope.text.trim()||'○○';return`본 문서는 ${s}${/까지$/.test(s)?'':'에'} 발송합니다.`;}
+
+function toText(doc,withHead){
+  const o=[];
+  if(withHead){o.push('수신  '+fixed.recv.text.trim());if(fixed.via.text.trim())o.push('(경유)  '+fixed.via.text.trim());o.push('제목  '+strip(titleFull()));o.push('');}
+  const endBody=!doc.attach.length;
+  doc.body.forEach((l,i)=>o.push('  '.repeat(l.indent)+(l.marker?l.marker+' ':'')+strip(l.text)+(endBody&&i===doc.body.length-1?'  끝.':'')));
+  if(doc.attach.length){
+    o.push('');const multi=doc.attach.length>1;
+    doc.attach.forEach((a,i)=>{
+      const last=i===doc.attach.length-1;
+      o.push((i===0?'붙임  ':'      ')+(multi?(i+1)+'. ':'')+strip(a)+(last?'  끝.':''));
+    });
+  }
+  if(state.useAction){o.push('');o.push(scopeLine());o.push(ACTIONS.join('\t'));o.push(ACTIONS.map(a=>state.actions.includes(a)?'○':'').join('\t'));}
+  return o.join('\n');
+}
+function toRich(doc){
+  const sp=n=>'&nbsp;'.repeat(n);
+  const st='font-family:"휴먼명조","바탕",serif;font-size:12pt;line-height:160%;margin:0';
+  const endBody=!doc.attach.length;
+  let h=doc.body.map((l,i)=>`<p style="${st};padding-left:${l.indent}em;${l.marker?`text-indent:-${(l.marker.length*0.55+0.3).toFixed(2)}em;padding-left:${(l.indent+l.marker.length*0.55+0.3).toFixed(2)}em`:''}">${l.marker?esc(l.marker)+sp(1):''}${esc(strip(l.text))}${endBody&&i===doc.body.length-1?sp(2)+'끝.':''}</p>`).join('');
+  if(doc.attach.length){
+    const multi=doc.attach.length>1;
+    h+=`<table style="border:0;border-collapse:collapse;margin-top:8px"><tr><td style="${st};vertical-align:top;padding:0 1em 0 0;border:0">붙임</td><td style="border:0;padding:0">`+doc.attach.map((a,i)=>`<p style="${st}">${multi?(i+1)+'.'+sp(1):''}${esc(strip(a))}${i===doc.attach.length-1?sp(2)+'끝.':''}</p>`).join('')+`</td></tr></table>`;
+  }
+  if(state.useAction){
+    const td='border:1px solid #000;text-align:center;padding:2px 4px;font-size:10pt';
+    h+=`<p style="${st};margin-top:8px">${esc(scopeLine())}</p><table style="border-collapse:collapse"><tr>${ACTIONS.map(a=>`<td style="${td}">${a}</td>`).join('')}</tr><tr>${ACTIONS.map(a=>`<td style="${td}">${state.actions.includes(a)?'○':''}</td>`).join('')}</tr></table>`;
+  }
+  return h;
+}
+function renderLint(){
+  const c={error:0,warn:0,info:0,sugg:0,fixed:0};lints.forEach(l=>c[l.level]++);
+  const lab={error:'오류',warn:'주의',info:'안내',sugg:'다듬기',fixed:'자동 교정'};
+  $('tally').innerHTML=['error','warn','info','sugg','fixed'].filter(k=>c[k]).map(k=>`<span class="pill ${k==='sugg'?'info':k}">${lab[k]} ${c[k]}</span>`).join('');
+  const order={error:0,warn:1,sugg:2,info:3,fixed:4};
+  const sorted=[...lints].sort((a,b)=>order[a.level]-order[b.level]);
+  if(!sorted.length){$('lint').innerHTML='<li class="fixed"><p class="ok">고칠 곳이 없습니다.</p></li>';$('applyAll').hidden=true;return;}
+  $('applyAll').hidden=!lints.some(l=>l.apply);
+  $('lint').innerHTML=sorted.map((l,i)=>{
+    const ex=Array.isArray(l.ex)?`<div class="ex">${l.ex.map(([a,b])=>`<s>${esc(a)}</s> → <ins>${esc(b)}</ins>`).join('<br>')}</div>`:(l.ex?`<div class="ex">${esc(l.ex)}</div>`:'');
+    return`<li class="${l.level==='sugg'?'info':l.level}"><div><div class="where">${FIELD_NAME[l.field]||''}</div><div class="msg">${esc(l.msg)}</div>${ex}${l.apply?`<button type="button" class="btn small" data-i="${lints.indexOf(l)}">반영</button>`:''}</div></li>`;
+  }).join('');
+}
+
+/* ============ 갱신 ============ */
+let doc=null;
+const KEY='gongmun-v2';
+function update(){
+  state=readForm();
+  doc=build();
+  lints=lint(doc);
+  renderPaper(doc);renderLint();
+  $('kwHint').textContent=KW_HINT[state.keyword]||'';
+  $('paper').classList.toggle('nofx',!$('showFx').checked);
+  try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+}
+
+/* ============ 이벤트: 공문 ============ */
+$('actions').innerHTML=ACTIONS.map(a=>`<label class="chip"><input type="checkbox" value="${a}">${a}</label>`).join('');
+$('chk').innerHTML=CHECKS.map(c=>`<li><label><input type="checkbox">${c}</label></li>`).join('');
+$('form').addEventListener('input',update);
+$('form').addEventListener('change',update);
+$('form').addEventListener('submit',e=>e.preventDefault());
+$('showFx').addEventListener('change',update);
+$('lint').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const l=lints[+b.dataset.i];if(l&&l.apply){l.apply();toast('반영했습니다.');}});
+$('applyAll').addEventListener('click',()=>{
+  let guard=0;
+  while(guard++<8){const ap=lints.find(l=>l.apply);if(!ap)break;ap.apply();}
+  toast('제안을 모두 반영했습니다.');
+});
+['outline','extra'].forEach(id=>$(id).addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;e.preventDefault();
+  const ta=e.target,v=ta.value,s=ta.selectionStart,en=ta.selectionEnd;
+  const ls=v.lastIndexOf('\n',s-1)+1;const le=v.indexOf('\n',en);const end=le<0?v.length:le;
+  const block=v.slice(ls,end);
+  const nb=e.shiftKey?block.replace(/^ {1,2}/gm,''):block.replace(/^/gm,'  ');
+  ta.value=v.slice(0,ls)+nb+v.slice(end);
+  const d=nb.length-block.length;
+  ta.selectionStart=Math.max(ls,s+(e.shiftKey?-(block.match(/^ {1,2}/)?.[0].length||0):2));ta.selectionEnd=en+d;
+  update();
+}));
+$('tpl').addEventListener('change',e=>{
+  const k=e.target.value;if(!k)return;
+  if(k==='pumi'){
+    // 품의 탭으로 전환
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+    document.querySelector('[data-page="pumi"]').classList.add('active');
+    $('page-pumi').classList.add('active');
+    e.target.value='';return;
+  }
+  const defaults=loadDefaults();
+  const tpl={...TEMPLATES[k],autofix:true};
+  if(defaults.org&&k==='blank')tpl.org=defaults.org;
+  if(defaults.sender&&k==='blank')tpl.sender=defaults.sender;
+  writeForm(tpl);e.target.value='';update();
+  toast(k==='blank'?'새 문서':'서식을 불러왔습니다.');
+});
+
+/* copy */
+function clipCopy(text,html){
+  const ok=()=>toast('복사했습니다.');
+  const fail=()=>{
+    const w=document.createElement('div');w.className='overlay';
+    w.innerHTML='<div class="box"><strong>아래 내용을 선택해 복사하세요 (Ctrl+C)</strong><textarea readonly></textarea><button class="btn">닫기</button></div>';
+    document.body.appendChild(w);const ta=w.querySelector('textarea');ta.value=text;ta.focus();ta.select();
+    w.querySelector('button').onclick=()=>w.remove();
+  };
+  try{
+    if(html&&window.ClipboardItem&&navigator.clipboard?.write){
+      navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([text],{type:'text/plain'})})]).then(ok,()=>navigator.clipboard.writeText(text).then(ok,fail));
+    }else if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(ok,fail);
+    else fail();
+  }catch(e){fail();}
+}
+$('copyBody').addEventListener('click',()=>clipCopy(toText(doc,false)));
+$('copyAll').addEventListener('click',()=>clipCopy(toText(doc,true)));
+$('copyRich').addEventListener('click',()=>clipCopy(toText(doc,false),toRich(doc)));
+
+let toastT;
+function toast(msg){
+  document.querySelector('.toast')?.remove();
+  const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');
+  t.textContent=msg;document.body.appendChild(t);
+  clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),2200);
+}
+
+/* ============ 품의서 ============ */
+function readPumi(){
+  return{org:$('pm-org').value,title:$('pm-title').value,date:$('pm-date').value,
+    project:$('pm-project').value,purpose:$('pm-purpose').value,content:$('pm-content').value,
+    budget:$('pm-budget').value,account:$('pm-account').value,drafter:$('pm-drafter').value,
+    approval:$('pm-approval').value,attach:$('pm-attach').value};
+}
+function renderPumi(){
+  const p=readPumi();
+  const af=autofix;
+  const fx=s=>autofix(s,true).text;
+  const attach=lines(p.attach).map(a=>{
+    a=a.replace(/^붙임\s*[:：]?\s*/,'').trim();
+    if(!/(\d+\s*(부|매|개|권|장|종|건|식|점))\.?$/.test(a))a+=' 1부';
+    return a;
+  });
+
+  let h=`<p class="p-org">${esc(p.org)||'<span class="empty-ph">기관명</span>'}</p>`;
+  h+=`<h2 style="text-align:center;font-size:20px;font-weight:800;margin:20px 0 24px;letter-spacing:.05em">품 의 서</h2>`;
+  h+=`<table class="p-pumi-table">`;
+  h+=`<tr><th>품의 제목</th><td colspan="3">${esc(fx(p.title))||'<span class="empty-ph">제목</span>'}</td></tr>`;
+  h+=`<tr><th>품의 일자</th><td>${esc(fx(p.date))}</td><th>품의자</th><td>${esc(p.drafter)}</td></tr>`;
+  h+=`<tr><th>사업명</th><td colspan="3">${esc(fx(p.project))}</td></tr>`;
+  h+=`<tr><th>목적</th><td colspan="3">${esc(fx(p.purpose))}</td></tr>`;
+
+  // 내용 파싱
+  const contentLines=p.content.split('\n').filter(l=>l.trim());
+  let contentHtml='';
+  if(contentLines.length){
+    contentHtml=contentLines.map(l=>{
+      const fxl=fx(l.trim());
+      return`<div style="padding:1px 0">${esc(fxl)}</div>`;
+    }).join('');
+  }
+  h+=`<tr><th>내용</th><td colspan="3" style="line-height:1.8">${contentHtml||'<span class="empty-ph">내용</span>'}</td></tr>`;
+  h+=`<tr><th>소요 예산</th><td colspan="3">${esc(fx(p.budget))}</td></tr>`;
+  h+=`<tr><th>예산 과목</th><td colspan="3">${esc(p.account)}</td></tr>`;
+  if(p.approval)h+=`<tr><th>결재선</th><td colspan="3">${esc(p.approval)}</td></tr>`;
+  if(attach.length)h+=`<tr><th>붙임</th><td colspan="3">${attach.map((a,i)=>`${attach.length>1?(i+1)+'. ':''}${esc(fx(a))}`).join('<br>')}</td></tr>`;
+  h+=`</table>`;
+
+  h+=`<div class="p-foot" style="margin-top:32px">${esc(p.org)||'<span class="empty-ph">기관명</span>'}</div>`;
+  $('pumiPaper').innerHTML=h;
+
+  try{localStorage.setItem('gongmun-pumi-v1',JSON.stringify(p));}catch(e){}
+}
+function pumiToText(p){
+  const fx=s=>autofix(s,true).text;
+  const o=[];
+  o.push('품 의 서');o.push('');
+  o.push('품의 제목: '+fx(p.title));
+  o.push('품의 일자: '+fx(p.date));
+  o.push('품의자: '+p.drafter);
+  o.push('사업명: '+fx(p.project));
+  o.push('목적: '+fx(p.purpose));
+  o.push('');o.push('[내용]');
+  p.content.split('\n').filter(l=>l.trim()).forEach(l=>o.push('  '+fx(l.trim())));
+  o.push('');
+  o.push('소요 예산: '+fx(p.budget));
+  o.push('예산 과목: '+p.account);
+  if(p.approval)o.push('결재선: '+p.approval);
+  const attach=lines(p.attach);
+  if(attach.length){o.push('');attach.forEach((a,i)=>o.push('붙임 '+(attach.length>1?(i+1)+'. ':'')+fx(a)));}
+  return o.join('\n');
+}
+function pumiToRich(p){
+  const fx=s=>autofix(s,true).text;
+  const st='font-family:"바탕",serif;font-size:12pt;line-height:160%;margin:0';
+  const td='border:1px solid #000;padding:6px 8px;vertical-align:top';
+  const th=td+';background:#f5f5f0;font-weight:bold;text-align:center;width:80px';
+  let h=`<p style="${st};text-align:center;font-size:16pt;font-weight:bold;margin-bottom:12px">품 의 서</p>`;
+  h+=`<table style="border-collapse:collapse;width:100%">`;
+  h+=`<tr><td style="${th}">품의 제목</td><td style="${td}" colspan="3">${esc(fx(p.title))}</td></tr>`;
+  h+=`<tr><td style="${th}">품의 일자</td><td style="${td}">${esc(fx(p.date))}</td><td style="${th}">품의자</td><td style="${td}">${esc(p.drafter)}</td></tr>`;
+  h+=`<tr><td style="${th}">사업명</td><td style="${td}" colspan="3">${esc(fx(p.project))}</td></tr>`;
+  h+=`<tr><td style="${th}">목적</td><td style="${td}" colspan="3">${esc(fx(p.purpose))}</td></tr>`;
+  const contentLines=p.content.split('\n').filter(l=>l.trim()).map(l=>`<p style="${st}">${esc(fx(l.trim()))}</p>`).join('');
+  h+=`<tr><td style="${th}">내용</td><td style="${td}" colspan="3">${contentLines}</td></tr>`;
+  h+=`<tr><td style="${th}">소요 예산</td><td style="${td}" colspan="3">${esc(fx(p.budget))}</td></tr>`;
+  h+=`<tr><td style="${th}">예산 과목</td><td style="${td}" colspan="3">${esc(p.account)}</td></tr>`;
+  h+=`</table>`;
+  return h;
+}
+$('pumiForm').addEventListener('input',renderPumi);
+$('pumiForm').addEventListener('change',renderPumi);
+$('pumiForm').addEventListener('submit',e=>e.preventDefault());
+$('pumiCopyText').addEventListener('click',()=>clipCopy(pumiToText(readPumi())));
+$('pumiCopyRich').addEventListener('click',()=>clipCopy(pumiToText(readPumi()),pumiToRich(readPumi())));
+
+/* ============ 기존 공문 → 새 공문 변환 ============ */
+$('rw-convert').addEventListener('click',()=>{
+  const src=$('rw-source').value;
+  const fromY=$('rw-from').value.trim();
+  const toY=$('rw-to').value.trim();
+  if(!src.trim()){toast('기존 공문을 붙여 넣으세요.');return;}
+
+  let result=src;
+  const log=[];
+
+  // 연도 변환
+  if(fromY&&toY&&fromY!==toY){
+    const diff=+toY-+fromY;
+    // 학년도 변환 (2025학년도 → 2026학년도)
+    result=result.replace(new RegExp(fromY+'(학년도|년도|년)','g'),(m,suf)=>{
+      log.push(`${m} → ${toY}${suf}`);
+      return toY+suf;
+    });
+    // 날짜의 연도 변환
+    result=result.replace(new RegExp('(?<!\\d)'+fromY+'(?=\\s*[\\.\\-/년])','g'),()=>{
+      return toY;
+    });
+    if(result!==src)log.push(`연도 ${fromY} → ${toY} 변환`);
+  }
+
+  // 자동 교정 적용
+  const fx=autofix(result,true);
+  result=fx.text;
+  fx.log.forEach(l=>log.push(`${l.rule}: ${l.from} → ${l.to}`));
+
+  // 날짜에 맞는 요일 다시 계산
+  result=result.replace(/(\d{4})\. (\d{1,2})\. (\d{1,2})\.\(([월화수목금토일])\)/g,(m,y,mo,d,w)=>{
+    const correct=weekdayOf(+y,+mo,+d);
+    if(correct&&correct!==w){
+      log.push(`요일 수정: ${m} → ${y}. ${mo}. ${d}.(${correct})`);
+      return`${y}. ${mo}. ${d}.(${correct})`;
+    }
+    return m;
+  });
+
+  $('rw-result').value=result;
+  $('rw-log').innerHTML=log.length?`<strong>변환 내역 (${log.length}건)</strong><ul style="margin:4px 0 0;padding-left:18px">`+log.slice(0,20).map(l=>`<li>${esc(l)}</li>`).join('')+(log.length>20?`<li>…외 ${log.length-20}건</li>`:'')+'</ul>':'변환할 항목이 없습니다.';
+  toast('변환 완료');
+});
+
+$('rw-copy').addEventListener('click',()=>{
+  const r=$('rw-result').value;
+  if(!r.trim()){toast('변환 결과가 없습니다.');return;}
+  clipCopy(r);
+});
+
+$('rw-toEditor').addEventListener('click',()=>{
+  const r=$('rw-result').value;
+  if(!r.trim()){toast('변환 결과가 없습니다.');return;}
+  // 공문 편집기의 intro에 넣기
+  $('intro').value=r;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelector('[data-page="gongmun"]').classList.add('active');
+  $('page-gongmun').classList.add('active');
+  update();
+  toast('공문 편집기로 보냈습니다.');
+});
+
+/* ============ AI 다듬기 (Gemini, 선택 사항) ============ */
+function getApiKey(){try{return localStorage.getItem('gongmun-apikey')||'';}catch(e){return'';}}
+
+$('ai-polish').addEventListener('click',async()=>{
+  const key=getApiKey();
+  if(!key){toast('설정 탭에서 Gemini API 키를 입력하세요.');return;}
+  const input=$('ai-input').value.trim();
+  if(!input){toast('다듬을 내용을 입력하세요.');return;}
+
+  $('aiLoading').classList.add('show');
+  $('aiResult').classList.remove('show');
+
+  const prompt=`당신은 한국 교육기관 공문서 작성 전문가입니다. 아래 규칙에 따라 러프한 내용을 공문 본문으로 다듬어 주세요.
+
+규칙:
+- 개조식(항목 나열)으로 쓸 것
+- 날짜: 2024. 9. 6.(금) 형식
+- 시간: 24시각제 (15:20)
+- 물결표(∼)는 앞뒤 글자에 붙여 씀
+- 쌍점(:)은 앞에 붙이고 뒤에 띄움
+- 쉬운 말 사용 (금일→오늘, 향후→앞으로)
+- "~하시기 바랍니다" 경어체
+- 일시→장소→대상→내용 순서
+- 간결하고 명확하게
+
+러프한 내용:
+${input}
+
+공문 본문(첫 문단 + 세부 항목)만 작성하세요. 기관명·수신·제목 등은 쓰지 마세요.`;
+
+  try{
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.3,maxOutputTokens:2048}})
+    });
+    const data=await res.json();
+    if(data.error){throw new Error(data.error.message||'API 오류');}
+    const text=data.candidates?.[0]?.content?.parts?.[0]?.text||'결과 없음';
+    $('aiResult').textContent=text;
+    $('aiResult').classList.add('show');
+  }catch(err){
+    $('aiResult').textContent='오류: '+err.message;
+    $('aiResult').classList.add('show');
+  }finally{
+    $('aiLoading').classList.remove('show');
+  }
+});
+
+$('ai-to-editor').addEventListener('click',()=>{
+  const r=$('aiResult').textContent;
+  if(!r||r.startsWith('오류:')){toast('AI 결과가 없습니다.');return;}
+  // 첫 줄은 intro, 나머지는 outline
+  const lines=r.split('\n');
+  let introEnd=0;
+  for(let i=0;i<lines.length;i++){
+    if(lines[i].trim()&&!/^\s*([-•·○□]|\d+[.)]|[가-힣][.)])/.test(lines[i])){introEnd=i+1;}
+    else break;
+  }
+  $('intro').value=lines.slice(0,introEnd).join('\n');
+  $('outline').value=lines.slice(introEnd).join('\n');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelector('[data-page="gongmun"]').classList.add('active');
+  $('page-gongmun').classList.add('active');
+  update();
+  toast('공문 편집기로 보냈습니다.');
+});
+
+/* ============ 설정 ============ */
+function loadDefaults(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gongmun-defaults')||'{}');
+    return{org:d.org||'',sender:d.sender||''};
+  }catch(e){return{org:'',sender:''};}
+}
+function initSettings(){
+  const d=loadDefaults();
+  $('set-org').value=d.org;
+  $('set-sender').value=d.sender;
+  $('set-apikey').value=getApiKey();
+}
+$('set-save').addEventListener('click',()=>{
+  try{
+    localStorage.setItem('gongmun-defaults',JSON.stringify({org:$('set-org').value,sender:$('set-sender').value}));
+    localStorage.setItem('gongmun-apikey',$('set-apikey').value);
+  }catch(e){}
+  toast('저장했습니다.');
+});
+$('set-export').addEventListener('click',()=>{
+  const data={};
+  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('gongmun'))data[k]=JSON.parse(localStorage.getItem(k));}}catch(e){}
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='gongmun-backup.json';a.click();
+  URL.revokeObjectURL(url);
+  toast('내보냈습니다.');
+});
+$('set-clear').addEventListener('click',()=>{
+  if(!confirm('임시 저장된 모든 데이터를 지울까요?'))return;
+  try{const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('gongmun'))keys.push(k);}keys.forEach(k=>localStorage.removeItem(k));}catch(e){}
+  toast('삭제했습니다.');
+});
+
+/* ============ 초기화 ============ */
+initSettings();
+// AI 섹션 표시/숨김
+if(!getApiKey())$('aiSection').style.display='block'; // 항상 보이되, 키 없으면 안내
+
+// 공문 복원
+let saved=null;
+try{saved=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+const defaults=loadDefaults();
+if(saved&&saved.title!==undefined){
+  writeForm(saved);
+}else{
+  const tpl={...TEMPLATES.meeting,autofix:true};
+  if(defaults.org)tpl.org=defaults.org;
+  if(defaults.sender)tpl.sender=defaults.sender;
+  writeForm(tpl);
+}
+update();
+
+// 품의 복원
+try{
+  const ps=JSON.parse(localStorage.getItem('gongmun-pumi-v1')||'null');
+  if(ps){for(const[k,v]of Object.entries(ps)){const el=$('pm-'+k);if(el)el.value=v||'';}}
+}catch(e){}
+renderPumi();
+})();
+</script>
+</body>
+</html>

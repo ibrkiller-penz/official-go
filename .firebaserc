@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "school-schedule-ad811"
+  },
+  "targets": {
+    "school-schedule-ad811": {
+      "hosting": {
+        "official-go": [
+          "official-go"
+        ]
+      }
+    }
+  }
+}
