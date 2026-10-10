@@ -11,12 +11,12 @@ function Highlight({ a }: { a: Achievement }) {
         aria-hidden
         className={`absolute -right-6 -bottom-6 h-28 w-28 rotate-45 ${red ? 'bg-sky' : 'bg-party'}`}
       />
-      <span className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-ink">{a.tag}</span>
+      <span className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1 text-sm font-semibold text-ink">{a.tag}</span>
       <p className="relative font-display text-5xl leading-none">
         {a.highlight}
         {a.highlightUnit && <span className="ml-1 text-2xl">{a.highlightUnit}</span>}
       </p>
-      <p className="relative mt-2 text-sm opacity-90">{a.highlightLabel}</p>
+      <p className="relative mt-2 text-base opacity-90">{a.highlightLabel}</p>
     </div>
   );
 }
@@ -41,7 +41,7 @@ export default function Achievements({ items }: { items: Achievement[] }) {
               <p className="eyebrow">Achievements</p>
               <h2 className="display mt-4 text-3xl md:text-4xl">대표 성과</h2>
             </div>
-            <p className="text-sm text-muted">카드를 누르면 자세한 내용과 관련 기사를 볼 수 있습니다.</p>
+            <p className="text-base text-muted">카드를 누르면 자세한 내용과 관련 기사를 볼 수 있습니다.</p>
           </div>
         </Reveal>
 
@@ -58,7 +58,7 @@ export default function Achievements({ items }: { items: Achievement[] }) {
                 <div className="flex flex-1 flex-col p-6">
                   <h3 className="text-xl font-bold text-ink md:text-2xl">{a.title}</h3>
                   <p className="mt-3 line-clamp-3 flex-1 text-base leading-relaxed text-ink-soft">{a.summary}</p>
-                  <p className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-party">
+                  <p className="mt-5 inline-flex items-center gap-1 text-base font-semibold text-party">
                     자세히 보기 <span aria-hidden className="transition group-hover:translate-x-1">→</span>
                   </p>
                 </div>
@@ -88,14 +88,14 @@ export default function Achievements({ items }: { items: Achievement[] }) {
 
               <ul className="mt-6 space-y-3">
                 {active.points.map((p) => (
-                  <li key={p} className="flex gap-3 text-[15px] leading-relaxed">
+                  <li key={p} className="flex gap-3 text-base leading-relaxed">
                     <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-party" />
                     {p}
                   </li>
                 ))}
               </ul>
 
-              <h4 className="mt-8 text-sm font-semibold text-muted">관련 기사</h4>
+              <h4 className="mt-8 text-base font-semibold text-muted">관련 기사</h4>
               <ul className="mt-3 divide-y divide-line border-y border-line">
                 {active.sources.map((s) => (
                   <li key={s.href}>
@@ -106,7 +106,7 @@ export default function Achievements({ items }: { items: Achievement[] }) {
                       className="flex items-start gap-3 py-4 transition hover:text-party"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs text-muted">
+                        <p className="text-sm text-muted">
                           {s.outlet} · {s.date}
                         </p>
                         <p className="mt-1 font-semibold leading-snug">{s.title}</p>

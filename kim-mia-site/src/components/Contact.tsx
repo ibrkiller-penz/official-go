@@ -50,11 +50,11 @@ export default function Contact({ contact }: { contact: SiteContent['contact'] }
             </p>
             <dl className="mt-8 space-y-3 text-base">
               <div>
-                <dt className="text-sm text-muted">전화</dt>
+                <dt className="text-base text-muted">전화</dt>
                 <dd className="font-semibold">{contact.phone}</dd>
               </div>
               <div>
-                <dt className="text-sm text-muted">사무실</dt>
+                <dt className="text-base text-muted">사무실</dt>
                 <dd className="font-semibold">{contact.address}</dd>
               </div>
             </dl>
@@ -68,24 +68,24 @@ export default function Contact({ contact }: { contact: SiteContent['contact'] }
 
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="block">
-                <span className="text-sm font-semibold">이름</span>
+                <span className="text-base font-semibold">이름</span>
                 <input name="name" required className={field} placeholder="홍길동" />
               </label>
               <label className="block">
-                <span className="text-sm font-semibold">연락처</span>
+                <span className="text-base font-semibold">연락처</span>
                 <input name="phone" type="tel" required className={field} placeholder="010-0000-0000" />
               </label>
               <label className="block sm:col-span-2">
-                <span className="text-sm font-semibold">거주 동</span>
+                <span className="text-base font-semibold">거주 동</span>
                 <input name="dong" className={field} placeholder="예: 우동" />
               </label>
               <label className="block sm:col-span-2">
-                <span className="text-sm font-semibold">내용</span>
+                <span className="text-base font-semibold">내용</span>
                 <textarea name="message" required rows={5} className={`${field} py-3`} placeholder="민원 또는 제안 내용을 적어 주세요" />
               </label>
             </div>
 
-            <label className="mt-6 flex items-start gap-3 text-sm leading-relaxed text-ink-soft">
+            <label className="mt-6 flex items-start gap-3 text-base leading-relaxed text-ink-soft">
               <input
                 type="checkbox"
                 name="consent"
@@ -105,7 +105,7 @@ export default function Contact({ contact }: { contact: SiteContent['contact'] }
               {status === 'sending' ? '전송 중…' : '접수하기'}
             </button>
 
-            <p role="status" className="mt-4 min-h-6 text-sm text-ink-soft">
+            <p role="status" className="mt-4 min-h-6 text-base text-ink-soft">
               {!ready && '접수 창구 연결을 준비 중입니다. 전화로 먼저 문의해 주세요.'}
               {ready && status === 'done' && '접수되었습니다. 감사합니다.'}
               {ready && status === 'error' && '전송에 실패했습니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요.'}

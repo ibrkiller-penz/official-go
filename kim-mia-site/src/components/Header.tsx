@@ -36,7 +36,7 @@ export default function Header({ content }: { content: SiteContent }) {
           />
           <span className="h-8 w-px bg-current opacity-25" aria-hidden />
           <span className="flex flex-col leading-none">
-            <span className="text-[11px] font-medium tracking-wide opacity-75 md:text-xs">
+            <span className="text-xs font-medium tracking-wide opacity-75 md:text-sm">
               {content.meta.title} · {content.meta.district.replace('부산 ', '')}
             </span>
             <span className="mt-1 text-xl font-bold tracking-tight md:text-2xl">{content.meta.name}</span>
@@ -49,7 +49,7 @@ export default function Header({ content }: { content: SiteContent }) {
               <li key={n.href}>
                 <a
                   href={n.href}
-                  className={`text-[15px] font-medium transition hover:text-party ${
+                  className={`text-base font-medium transition hover:text-party ${
                     scrolled ? 'text-ink' : 'text-cream/90'
                   }`}
                 >
@@ -63,7 +63,7 @@ export default function Header({ content }: { content: SiteContent }) {
         <div className="flex items-center gap-2">
           <a
             href="#contact"
-            className="hidden rounded-full border border-party px-5 py-2 text-sm font-semibold text-party transition hover:bg-party hover:text-ink md:inline-flex"
+            className="hidden rounded-full border border-party px-5 py-2 text-base font-semibold text-party transition hover:bg-party hover:text-ink md:inline-flex"
           >
             민원·제안
           </a>

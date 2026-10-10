@@ -6,7 +6,7 @@ export default function News({ items }: { items: NewsItem[] }) {
     <section id="news" className="bg-ink py-24 text-cream md:py-32">
       <div className="mx-auto max-w-6xl px-4 md:px-8">
         <Reveal>
-          <p className="eyebrow">News</p>
+          <p className="eyebrow text-party-soft">News</p>
           <h2 className="mt-4 font-sans text-3xl font-bold tracking-tight md:text-4xl">언론에 비친 김미애</h2>
         </Reveal>
         <ul className="mt-12 divide-y divide-cream/15 border-y border-cream/15">
@@ -19,7 +19,7 @@ export default function News({ items }: { items: NewsItem[] }) {
                 className="group flex items-center gap-6 py-6 transition hover:text-party-soft"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-party-soft">
+                  <p className="text-base text-party-soft">
                     {n.outlet} · {n.date}
                   </p>
                   <p className="mt-1 text-lg font-semibold leading-snug">{n.title}</p>

@@ -23,10 +23,10 @@ export default function About({ items }: { items: TimelineItem[] }) {
             <Reveal as="li" key={t.year} delay={i * 110} className="relative pb-10 last:pb-0">
               <span
                 aria-hidden
-                className="absolute top-2 -left-[calc(2rem+6.5px)] h-3 w-3 rounded-full border-2 border-party bg-cream md:-left-[calc(3rem+6.5px)]"
+                className="absolute top-3 -left-[calc(2rem+6.5px)] h-3 w-3 rounded-full border-2 border-party bg-cream md:-left-[calc(3rem+6.5px)]"
               />
-              <p className="text-lg font-bold text-party">{t.year}</p>
-              <p className="mt-2 text-lg leading-relaxed text-ink">{t.text}</p>
+              <p className="inline-block rounded-full bg-party px-3.5 py-1 text-base font-bold text-white">{t.year}</p>
+              <p className="mt-3 text-lg leading-relaxed text-ink">{t.text}</p>
             </Reveal>
           ))}
         </ol>

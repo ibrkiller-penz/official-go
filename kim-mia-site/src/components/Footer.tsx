@@ -8,13 +8,13 @@ export default function Footer({ content }: { content: SiteContent }) {
           <div>
             <img src="/images/logo/logo-horizontal-white-tight.png" alt="국민의힘" className="mb-6 h-7 w-auto" />
             <p className="text-2xl font-bold text-cream">{content.meta.name}</p>
-            <p className="mt-2 text-sm">
+            <p className="mt-2 text-base">
               {content.meta.title} · {content.meta.district}
             </p>
-            <p className="mt-2 text-sm text-cream/60">{content.meta.slogan}</p>
+            <p className="mt-2 text-base text-cream/60">{content.meta.slogan}</p>
           </div>
           {content.footer.sns.length > 0 && (
-            <ul className="flex gap-6 text-sm">
+            <ul className="flex gap-6 text-base">
               {content.footer.sns.map((s) => (
                 <li key={s.href}>
                   <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-party-soft">
@@ -26,7 +26,7 @@ export default function Footer({ content }: { content: SiteContent }) {
           )}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-cream/15 pt-6 text-xs text-cream/60 md:flex-row md:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-cream/15 pt-6 text-sm text-cream/60 md:flex-row md:justify-between">
           <p>{content.footer.copyright}</p>
           <a href={content.footer.privacyHref} className="hover:text-party-soft">
             개인정보처리방침

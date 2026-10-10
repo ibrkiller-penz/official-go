@@ -9,7 +9,7 @@ export default function Issues({ items, placeholder }: { items: SiteContent['iss
       <Reveal>
         <p className="eyebrow">Local Issues</p>
         <h2 className="display mt-4 text-3xl md:text-4xl">해운대을 지역 현안</h2>
-        <p className="mt-3 text-sm text-muted">관할 동 정보 {placeholder}</p>
+        <p className="mt-3 text-base text-muted">관할 동 정보 {placeholder}</p>
       </Reveal>
       <div className="mt-12 grid gap-5 md:grid-cols-2">
         {items.map((it, i) => (

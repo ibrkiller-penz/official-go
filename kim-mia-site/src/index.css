@@ -20,12 +20,19 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* 고령 주민 가독성: 기본 18px(모바일), 19px(태블릿 이상). rem 단위 글자·여백이 함께 커집니다 */
+    font-size: 112.5%;
+  }
+  @media (min-width: 768px) {
+    html {
+      font-size: 118.75%;
+    }
   }
   body {
     background: var(--color-cream);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.75;
     word-break: keep-all;
   }
@@ -41,7 +48,7 @@
 
 @layer components {
   .eyebrow {
-    @apply font-sans text-sm tracking-[0.25em] text-party-soft uppercase;
+    @apply font-sans text-base font-bold tracking-[0.2em] text-party uppercase;
   }
   .display {
     @apply font-sans font-bold tracking-tight text-ink;
