@@ -21,12 +21,19 @@ export default function Header({ content }: { content: SiteContent }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:h-20 md:px-8">
         <a
           href="#top"
-          className={`font-serif text-xl font-bold tracking-wide transition ${
+          className={`flex items-center gap-3 font-serif text-xl font-bold tracking-wide transition ${
             scrolled || open ? 'text-ink' : 'text-cream'
           }`}
         >
+          {/* 당 로고: 어두운 배경에서는 흰색, 밝은 배경에서는 검정 버전 */}
+          <img
+            src={scrolled || open ? '/images/logo/logo-horizontal-black.png' : '/images/logo/logo-horizontal-white.png'}
+            alt="국민의힘"
+            className="h-9 w-auto md:h-11"
+          />
+          <span className="h-5 w-px bg-current opacity-30" aria-hidden />
           {content.meta.name}
-          <span className="ml-2 hidden text-sm font-sans font-normal tracking-normal opacity-80 sm:inline">
+          <span className="hidden text-sm font-sans font-normal tracking-normal opacity-80 sm:inline">
             {content.meta.title}
           </span>
         </a>
