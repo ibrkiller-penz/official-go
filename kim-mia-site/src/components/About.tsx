@@ -25,7 +25,7 @@ export default function About({ items }: { items: TimelineItem[] }) {
                 aria-hidden
                 className="absolute top-2 -left-[calc(2rem+6.5px)] h-3 w-3 rounded-full border-2 border-party bg-cream md:-left-[calc(3rem+6.5px)]"
               />
-              <p className="font-display text-lg text-party">{t.year}</p>
+              <p className="text-lg font-bold text-party">{t.year}</p>
               <p className="mt-2 text-lg leading-relaxed text-ink">{t.text}</p>
             </Reveal>
           ))}

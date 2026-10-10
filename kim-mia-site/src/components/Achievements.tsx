@@ -56,7 +56,7 @@ export default function Achievements({ items }: { items: Achievement[] }) {
               >
                 <Highlight a={a} />
                 <div className="flex flex-1 flex-col p-6">
-                  <h3 className="font-display text-2xl text-ink">{a.title}</h3>
+                  <h3 className="text-xl font-bold text-ink md:text-2xl">{a.title}</h3>
                   <p className="mt-3 line-clamp-3 flex-1 text-base leading-relaxed text-ink-soft">{a.summary}</p>
                   <p className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-party">
                     자세히 보기 <span aria-hidden className="transition group-hover:translate-x-1">→</span>
@@ -81,7 +81,7 @@ export default function Achievements({ items }: { items: Achievement[] }) {
           <article>
             <Highlight a={active} />
             <div className="p-6 md:p-8">
-              <h3 id="achv-title" className="font-display text-3xl">
+              <h3 id="achv-title" className="text-2xl font-bold md:text-3xl">
                 {active.title}
               </h3>
               <p className="mt-4 text-base leading-relaxed text-ink-soft">{active.summary}</p>

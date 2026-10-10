@@ -44,7 +44,7 @@
     @apply font-sans text-sm tracking-[0.25em] text-party-soft uppercase;
   }
   .display {
-    @apply font-display tracking-tight text-ink;
+    @apply font-sans font-bold tracking-tight text-ink;
   }
   .hairline {
     @apply h-px w-16 bg-party;

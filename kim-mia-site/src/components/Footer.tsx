@@ -7,7 +7,7 @@ export default function Footer({ content }: { content: SiteContent }) {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
             <img src="/images/logo/logo-horizontal-white.png" alt="국민의힘" className="mb-6 h-12 w-auto" />
-            <p className="font-display text-2xl text-cream">{content.meta.name}</p>
+            <p className="text-2xl font-bold text-cream">{content.meta.name}</p>
             <p className="mt-2 text-sm">
               {content.meta.title} · {content.meta.district}
             </p>

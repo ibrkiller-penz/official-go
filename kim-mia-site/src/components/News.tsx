@@ -7,7 +7,7 @@ export default function News({ items }: { items: NewsItem[] }) {
       <div className="mx-auto max-w-6xl px-4 md:px-8">
         <Reveal>
           <p className="eyebrow">News</p>
-          <h2 className="font-display mt-4 text-3xl md:text-4xl">언론에 비친 김미애</h2>
+          <h2 className="mt-4 font-sans text-3xl font-bold tracking-tight md:text-4xl">언론에 비친 김미애</h2>
         </Reveal>
         <ul className="mt-12 divide-y divide-cream/15 border-y border-cream/15">
           {items.map((n, i) => (
