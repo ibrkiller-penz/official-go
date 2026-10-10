@@ -9,7 +9,7 @@ export default function SafeImage({ src, alt, className = '' }: { src: string; a
       <div
         role="img"
         aria-label={alt}
-        className={`bg-gradient-to-br from-navy via-ink-soft to-gold/60 ${className}`}
+        className={`bg-gradient-to-br from-navy via-ink-soft to-party/60 ${className}`}
       />
     );
   }

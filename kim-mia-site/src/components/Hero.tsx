@@ -13,16 +13,16 @@ export default function Hero({ content }: { content: SiteContent }) {
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/70 to-ink/20" />
 
       <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-32 md:px-8 md:pb-24">
-        <p className="mb-5 font-sans text-sm tracking-[0.3em] text-gold-soft uppercase">{meta.subcopy}</p>
+        <p className="mb-5 font-sans text-base font-medium text-party-soft">{meta.subcopy}</p>
         <h1 className="font-serif text-[2.5rem] leading-[1.25] font-bold text-cream sm:text-6xl md:text-7xl">
           {meta.slogan}
         </h1>
-        <div className="mt-8 h-px w-20 bg-gold" />
+        <div className="mt-8 h-px w-20 bg-party" />
         <p className="mt-8 max-w-xl text-lg leading-relaxed text-cream/85">
           땀과 생활의 무게를 아는 사람으로서, 주민 한 분 한 분의 이야기를 끝까지 듣겠습니다.
         </p>
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <a href="#contact" className="btn-primary bg-gold text-ink hover:bg-gold-soft">
+          <a href="#contact" className="btn-primary bg-party text-white hover:bg-party/90">
             주민 제안하기
           </a>
           <a href="#achievements" className="btn-ghost">

@@ -37,7 +37,7 @@ export default function Header({ content }: { content: SiteContent }) {
               <li key={n.href}>
                 <a
                   href={n.href}
-                  className={`text-[15px] font-medium transition hover:text-gold ${
+                  className={`text-[15px] font-medium transition hover:text-party ${
                     scrolled ? 'text-ink' : 'text-cream/90'
                   }`}
                 >
@@ -51,7 +51,7 @@ export default function Header({ content }: { content: SiteContent }) {
         <div className="flex items-center gap-2">
           <a
             href="#contact"
-            className="hidden rounded-full border border-gold px-5 py-2 text-sm font-semibold text-gold transition hover:bg-gold hover:text-ink md:inline-flex"
+            className="hidden rounded-full border border-party px-5 py-2 text-sm font-semibold text-party transition hover:bg-party hover:text-ink md:inline-flex"
           >
             민원·제안
           </a>

@@ -39,11 +39,11 @@ function CountUp({ to }: { to: number }) {
 export default function Stats({ items }: { items: Stat[] }) {
   return (
     <section aria-label="숫자로 보는 활동" className="bg-ink text-cream">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px bg-gold/20 px-0 md:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px bg-party/20 px-0 md:grid-cols-4">
         {items.map((s, i) => (
           <Reveal key={s.label} delay={i * 90}>
             <div className="flex h-full flex-col bg-ink px-6 py-10 md:px-8 md:py-14">
-              <p className="font-serif text-4xl font-bold text-gold-soft md:text-5xl">
+              <p className="font-serif text-4xl font-bold text-party-soft md:text-5xl">
                 <CountUp to={s.value} />
                 <span className="ml-1 text-2xl font-semibold">{s.suffix}</span>
               </p>

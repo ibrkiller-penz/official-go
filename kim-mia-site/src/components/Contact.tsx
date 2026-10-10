@@ -31,7 +31,7 @@ export default function Contact({ contact }: { contact: SiteContent['contact'] }
   };
 
   const field =
-    'mt-2 w-full min-h-12 rounded-xl border border-line bg-white px-4 text-base text-ink placeholder:text-muted/70 focus:border-gold focus:outline-none';
+    'mt-2 w-full min-h-12 rounded-xl border border-line bg-white px-4 text-base text-ink placeholder:text-muted/70 focus:border-party focus:outline-none';
 
   return (
     <section id="contact" className="bg-cream-deep py-24 md:py-32">

@@ -22,11 +22,11 @@ export default function News({ items }: { items: NewsItem[] }) {
                   href={n.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-6 py-6 transition hover:text-gold-soft"
+                  className="group flex items-center gap-6 py-6 transition hover:text-party-soft"
                 >
                   <SafeImage src={n.image} alt="" className="hidden h-20 w-28 shrink-0 rounded-lg sm:block" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm tracking-wider text-gold-soft">{n.date}</p>
+                    <p className="text-sm tracking-wider text-party-soft">{n.date}</p>
                     <p className="mt-1 truncate text-lg font-semibold">{n.title}</p>
                   </div>
                   <span aria-hidden className="text-2xl transition group-hover:translate-x-1">→</span>

@@ -1,11 +1,12 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-ink: #14203a;
-  --color-ink-soft: #2b3a57;
+  --color-ink: #112c56;
+  --color-ink-soft: #1f3d6b;
   --color-navy: #1f2a44;
-  --color-gold: #c99a4b;
-  --color-gold-soft: #e8c27a;
+  --color-party: #e61e2b;
+  --color-party-soft: #ff6b75;
+  --color-sky: #00b5e2;
   --color-cream: #faf7f0;
   --color-cream-deep: #f1eadb;
   --color-line: #e3d9c4;
@@ -29,24 +30,24 @@
     word-break: keep-all;
   }
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--color-party);
     outline-offset: 3px;
   }
   ::selection {
-    background: var(--color-gold-soft);
+    background: var(--color-party-soft);
     color: var(--color-ink);
   }
 }
 
 @layer components {
   .eyebrow {
-    @apply font-sans text-sm tracking-[0.25em] text-gold uppercase;
+    @apply font-sans text-sm tracking-[0.25em] text-party-soft uppercase;
   }
   .display {
     @apply font-serif font-bold tracking-tight text-ink;
   }
   .hairline {
-    @apply h-px w-16 bg-gold;
+    @apply h-px w-16 bg-party;
   }
   .btn-primary {
     @apply inline-flex min-h-12 items-center justify-center rounded-full bg-ink px-7 py-3 text-base font-semibold text-cream transition hover:bg-ink-soft;
