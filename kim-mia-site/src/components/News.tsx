@@ -10,7 +10,7 @@ export default function News({ items }: { items: NewsItem[] }) {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="eyebrow">News</p>
-              <h2 className="font-serif mt-4 text-3xl font-bold md:text-4xl">최근 소식</h2>
+              <h2 className="font-display mt-4 text-3xl md:text-4xl">최근 소식</h2>
             </div>
           </div>
         </Reveal>

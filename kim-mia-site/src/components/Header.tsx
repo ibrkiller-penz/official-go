@@ -21,7 +21,7 @@ export default function Header({ content }: { content: SiteContent }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:h-20 md:px-8">
         <a
           href="#top"
-          className={`flex items-center gap-3 font-serif text-xl font-bold tracking-wide transition ${
+          className={`flex items-center gap-3 font-display text-xl tracking-wide transition ${
             scrolled || open ? 'text-ink' : 'text-cream'
           }`}
         >

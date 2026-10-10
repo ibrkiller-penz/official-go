@@ -43,7 +43,7 @@ export default function Stats({ items }: { items: Stat[] }) {
         {items.map((s, i) => (
           <Reveal key={s.label} delay={i * 90}>
             <div className="flex h-full flex-col bg-ink px-6 py-10 md:px-8 md:py-14">
-              <p className="font-serif text-4xl font-bold text-party-soft md:text-5xl">
+              <p className="font-display text-4xl text-party-soft md:text-5xl">
                 <CountUp to={s.value} />
                 <span className="ml-1 text-2xl font-semibold">{s.suffix}</span>
               </p>

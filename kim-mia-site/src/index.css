@@ -12,8 +12,8 @@
   --color-line: #e3d9c4;
   --color-muted: #6b6f7a;
 
-  --font-serif: 'Nanum Myeongjo', 'Batang', serif;
-  --font-sans: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --font-display: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+  --font-sans: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
 }
 
 @layer base {
@@ -44,7 +44,7 @@
     @apply font-sans text-sm tracking-[0.25em] text-party-soft uppercase;
   }
   .display {
-    @apply font-serif font-bold tracking-tight text-ink;
+    @apply font-display tracking-tight text-ink;
   }
   .hairline {
     @apply h-px w-16 bg-party;

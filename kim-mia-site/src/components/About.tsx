@@ -25,7 +25,7 @@ export default function About({ items }: { items: TimelineItem[] }) {
             <Reveal key={t.year} delay={i * 110}>
               <li className="relative pb-10 last:pb-0">
                 <span className="absolute -left-[3.25rem] top-1 hidden h-3 w-3 rounded-full border-2 border-party bg-cream md:block" />
-                <p className="font-serif text-lg font-bold text-party">{t.year}</p>
+                <p className="font-display text-lg text-party">{t.year}</p>
                 <p className="mt-2 text-lg leading-relaxed text-ink">{t.text}</p>
               </li>
             </Reveal>

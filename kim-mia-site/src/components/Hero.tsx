@@ -14,7 +14,7 @@ export default function Hero({ content }: { content: SiteContent }) {
 
       <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-32 md:px-8 md:pb-24">
         <p className="mb-5 font-sans text-base font-medium text-party-soft">{meta.subcopy}</p>
-        <h1 className="font-serif text-[2.5rem] leading-[1.25] font-bold text-cream sm:text-6xl md:text-7xl">
+        <h1 className="font-display text-[2.5rem] leading-[1.25] text-cream sm:text-6xl md:text-7xl">
           {meta.slogan}
         </h1>
         <div className="mt-8 h-px w-20 bg-party" />

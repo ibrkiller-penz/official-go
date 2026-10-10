@@ -15,7 +15,7 @@ export default function Issues({ items, placeholder }: { items: SiteContent['iss
         {items.map((it, i) => (
           <Reveal key={it.title} delay={(i % 2) * 100}>
             <div className="h-full rounded-2xl border border-line bg-cream p-7">
-              <h3 className="font-serif text-xl font-bold">{it.title}</h3>
+              <h3 className="font-display text-xl">{it.title}</h3>
               <p className="mt-3 text-base text-ink-soft">{it.body}</p>
             </div>
           </Reveal>

@@ -31,7 +31,7 @@ export default function Achievements({ items }: { items: Achievement[] }) {
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col p-7">
-                  <h3 className="font-serif text-2xl font-bold text-ink">{a.title}</h3>
+                  <h3 className="font-display text-2xl text-ink">{a.title}</h3>
                   <p className="mt-3 flex-1 text-base leading-relaxed text-ink-soft">{a.body}</p>
                   <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-muted">출처 · {a.source}</p>
                 </div>
