@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #14203a;
+  --color-ink-soft: #2b3a57;
+  --color-navy: #1f2a44;
+  --color-gold: #c99a4b;
+  --color-gold-soft: #e8c27a;
+  --color-cream: #faf7f0;
+  --color-cream-deep: #f1eadb;
+  --color-line: #e3d9c4;
+  --color-muted: #6b6f7a;
+
+  --font-serif: 'Nanum Myeongjo', 'Batang', serif;
+  --font-sans: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.75;
+    word-break: keep-all;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: var(--color-gold-soft);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-sans text-sm tracking-[0.25em] text-gold uppercase;
+  }
+  .display {
+    @apply font-serif font-bold tracking-tight text-ink;
+  }
+  .hairline {
+    @apply h-px w-16 bg-gold;
+  }
+  .btn-primary {
+    @apply inline-flex min-h-12 items-center justify-center rounded-full bg-ink px-7 py-3 text-base font-semibold text-cream transition hover:bg-ink-soft;
+  }
+  .btn-ghost {
+    @apply inline-flex min-h-12 items-center justify-center rounded-full border border-cream/60 px-7 py-3 text-base font-semibold text-cream transition hover:bg-cream hover:text-ink;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
