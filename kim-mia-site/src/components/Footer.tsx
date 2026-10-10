@@ -6,7 +6,7 @@ export default function Footer({ content }: { content: SiteContent }) {
       <div className="mx-auto max-w-6xl px-4 py-16 md:px-8">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
-            <img src="/images/logo/logo-horizontal-white.png" alt="국민의힘" className="mb-6 h-12 w-auto" />
+            <img src="/images/logo/logo-horizontal-white-tight.png" alt="국민의힘" className="mb-6 h-7 w-auto" />
             <p className="text-2xl font-bold text-cream">{content.meta.name}</p>
             <p className="mt-2 text-sm">
               {content.meta.title} · {content.meta.district}

@@ -21,20 +21,25 @@ export default function Header({ content }: { content: SiteContent }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:h-20 md:px-8">
         <a
           href="#top"
-          className={`flex items-center gap-3 font-display text-xl tracking-wide transition ${
-            scrolled || open ? 'text-ink' : 'text-cream'
-          }`}
+          aria-label={`${content.meta.title} ${content.meta.name} 홈`}
+          className={`flex items-center gap-3 transition md:gap-4 ${scrolled || open ? 'text-ink' : 'text-cream'}`}
         >
-          {/* 당 로고: 어두운 배경에서는 흰색, 밝은 배경에서는 검정 버전 */}
+          {/* 당 로고: 어두운 배경에서는 흰색, 밝은 배경에서는 검정 버전 (여백 없는 파일) */}
           <img
-            src={scrolled || open ? '/images/logo/logo-horizontal-black.png' : '/images/logo/logo-horizontal-white.png'}
+            src={
+              scrolled || open
+                ? '/images/logo/logo-horizontal-black-tight.png'
+                : '/images/logo/logo-horizontal-white-tight.png'
+            }
             alt="국민의힘"
-            className="h-9 w-auto md:h-11"
+            className="h-5 w-auto md:h-6"
           />
-          <span className="h-5 w-px bg-current opacity-30" aria-hidden />
-          {content.meta.name}
-          <span className="hidden text-sm font-sans font-normal tracking-normal opacity-80 sm:inline">
-            {content.meta.title}
+          <span className="h-8 w-px bg-current opacity-25" aria-hidden />
+          <span className="flex flex-col leading-none">
+            <span className="text-[11px] font-medium tracking-wide opacity-75 md:text-xs">
+              {content.meta.title} · {content.meta.district.replace('부산 ', '')}
+            </span>
+            <span className="mt-1 text-xl font-bold tracking-tight md:text-2xl">{content.meta.name}</span>
           </span>
         </a>
 
