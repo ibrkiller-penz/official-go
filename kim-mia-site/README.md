@@ -28,5 +28,18 @@ npm run preview  # 빌드 결과 미리보기
 ## 이미지
 `public/images/README.md`의 파일명 규칙대로 Canva에서 내보낸 파일을 넣으면 됩니다.
 
+## 배포 (주소: https://haeundae.web.app)
+Firebase Hosting 사이트 ID는 `haeundae`입니다 (`firebase.json`의 `site`). 처음 한 번만 필요합니다.
+
+```bash
+npm install && npm run build
+npx firebase-tools login
+npx firebase-tools hosting:sites:create haeundae   # 사이트가 없을 때만
+npx firebase-tools deploy --only hosting           # 이 폴더에서 실행
+```
+
+- `haeundae.web.app` 이름이 이미 사용 중이면 생성에 실패합니다. 그 경우 사이트 ID를 바꾸고 `firebase.json`을 수정하세요.
+- 게시 전 `TODO.md` 확인과 의원실 승인이 필요합니다.
+
 ## 배포 주의
 현재 저장소 루트의 `firebase.json`은 `public: "."`입니다. 이 폴더를 루트 배포에 섞으면 소스 파일이 공개됩니다. 이 사이트는 `dist/`만 따로 배포하도록 설정해 주세요.
