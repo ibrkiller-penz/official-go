@@ -15,7 +15,7 @@ export default function Header({ content }: { content: SiteContent }) {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition duration-300 ${
-        scrolled || open ? 'bg-cream/95 shadow-[0_1px_0_var(--color-line)] backdrop-blur' : 'bg-transparent'
+        scrolled || open ? 'bg-cream shadow-[0_1px_0_var(--color-line),0_8px_20px_-12px_rgba(17,44,86,0.35)]' : 'bg-transparent'
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:h-20 md:px-8">
@@ -63,7 +63,7 @@ export default function Header({ content }: { content: SiteContent }) {
         <div className="flex items-center gap-2">
           <a
             href="#contact"
-            className="hidden rounded-full border border-party px-5 py-2 text-base font-semibold text-party transition hover:bg-party hover:text-ink md:inline-flex"
+            className="hidden rounded-full bg-party px-5 py-2 text-base font-bold text-white transition hover:bg-party/90 md:inline-flex"
           >
             민원·제안
           </a>
