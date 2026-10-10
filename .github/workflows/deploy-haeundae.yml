@@ -1,12 +1,8 @@
 name: Deploy haeundae-kim (Firebase Hosting)
 
+# 서비스 계정 키 발급이 조직 정책으로 막혀 있어, 자동 배포는 수동 실행만 허용합니다.
+# 키가 준비되면 push 트리거를 다시 추가하세요.
 on:
-  push:
-    branches:
-      - claude/bold-bardeen-vx5k4i
-    paths:
-      - 'kim-mia-site/**'
-      - '.github/workflows/deploy-haeundae.yml'
   workflow_dispatch:
 
 jobs:
