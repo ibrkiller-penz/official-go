@@ -26,12 +26,29 @@ export default function Footer({ content }: { content: SiteContent }) {
           )}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-cream/15 pt-6 text-sm text-cream/60 md:flex-row md:justify-between">
+        <p className="mt-10 max-w-3xl text-base leading-relaxed text-cream/70">
+          {content.footer.sourceNote} 최종 갱신 {content.footer.updated}.
+        </p>
+
+        <div className="mt-6 flex flex-col gap-3 border-t border-cream/15 pt-6 text-sm text-cream/60 md:flex-row md:justify-between">
           <p>{content.footer.copyright}</p>
-          <a href={content.footer.privacyHref} className="hover:text-party-soft">
+          <a href="#privacy" className="hover:text-party-soft">
             개인정보처리방침
           </a>
         </div>
+
+        <details id="privacy" className="mt-6 rounded-xl border border-cream/15 p-5 text-base text-cream/80">
+          <summary className="cursor-pointer font-bold text-cream">개인정보처리방침</summary>
+          <ul className="mt-4 list-disc space-y-2 pl-5 leading-relaxed">
+            <li>이 사이트는 방문자의 개인정보를 저장하지 않으며, 쿠키나 방문 추적 도구를 쓰지 않습니다.</li>
+            <li>
+              민원·제안 양식에 적은 이름, 연락처, 거주 동, 내용은 방문자의 메일 앱을 통해 의원실 이메일(
+              {content.contact.email})로 직접 전달됩니다.
+            </li>
+            <li>전달된 내용의 이용, 보관, 파기는 의원실의 개인정보 처리 기준을 따릅니다.</li>
+            <li>문의: 국회 사무실 {content.contact.phone}</li>
+          </ul>
+        </details>
       </div>
     </footer>
   );

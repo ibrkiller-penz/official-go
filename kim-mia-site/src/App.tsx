@@ -26,9 +26,9 @@ export default function App() {
       <main id="main">
         <Hero content={content} />
         <Stats items={content.stats} />
-        <About items={content.timeline} />
+        <About items={content.timeline} roles={content.roles} />
         <Achievements items={content.achievements} />
-        <Issues items={content.issues} placeholder={content.placeholder} />
+        <Issues items={content.issues} />
         <News items={content.news} />
         <Media video={content.video} />
         <Contact contact={content.contact} />

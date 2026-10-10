@@ -3,6 +3,8 @@ import Reveal from './Reveal';
 import SafeImage from './SafeImage';
 
 export default function Media({ video }: { video: SiteContent['video'] }) {
+  // 영상도 사진도 없으면 빈 칸을 보여 주지 않고 섹션을 숨깁니다.
+  if (!video.youtubeId && video.gallery.length === 0) return null;
   return (
     <section id="media" className="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
       <Reveal>
