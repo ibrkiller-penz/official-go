@@ -36,8 +36,8 @@ export default function Contact({ contact }: { contact: SiteContent['contact'] }
   return (
     <section id="contact" className="bg-cream-deep py-24 md:py-32">
       <div className="mx-auto grid max-w-6xl gap-14 px-4 md:grid-cols-12 md:px-8">
-        <Reveal>
-          <div className="md:col-span-5">
+        <Reveal className="md:col-span-5">
+          <div>
             <p className="eyebrow">Contact</p>
             <h2 className="display mt-4 text-3xl leading-snug md:text-4xl">
               말씀을
@@ -61,8 +61,8 @@ export default function Contact({ contact }: { contact: SiteContent['contact'] }
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
-          <form onSubmit={onSubmit} className="md:col-span-7 rounded-2xl border border-line bg-cream p-6 shadow-sm md:p-10">
+        <Reveal delay={120} className="md:col-span-7">
+          <form onSubmit={onSubmit} className="rounded-2xl border border-line bg-cream p-6 shadow-sm md:p-10">
             {/* honeypot */}
             <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
 

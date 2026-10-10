@@ -10,20 +10,26 @@ export interface TimelineItem {
   text: string;
 }
 
-export interface Achievement {
-  tag: string;
-  title: string;
-  body: string;
-  source: string;
-  image: string;
-}
-
-export interface NewsItem {
+export interface Source {
+  outlet: string;
   date: string;
   title: string;
   href: string;
-  image: string;
 }
+
+export interface Achievement {
+  tag: string;
+  title: string;
+  tone: 'red' | 'navy';
+  highlight: string;
+  highlightUnit: string;
+  highlightLabel: string;
+  summary: string;
+  points: string[];
+  sources: Source[];
+}
+
+export type NewsItem = Source;
 
 export interface SiteContent {
   mode: 'assembly' | 'campaign';
